@@ -3,6 +3,7 @@
 namespace Zenstruck\Collection\Tests;
 
 use PHPUnit\Framework\TestCase;
+
 use function Zenstruck\arr;
 use function Zenstruck\collect;
 

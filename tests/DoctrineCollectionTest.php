@@ -7,7 +7,6 @@ use Zenstruck\Collection\DoctrineCollection;
 
 /**
  * @source https://github.com/doctrine/collections/blob/fb7a59b4d2c57f7c992428cfd70a0cc501d6f220/tests/Doctrine/Tests/Common/Collections/BaseCollectionTest.php
- *
  * @author Kevin Bond <kevinbond@gmail.com>
  */
 abstract class DoctrineCollectionTest extends TestCase

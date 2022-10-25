@@ -6,6 +6,7 @@ namespace Zenstruck\Collection\Tests\Doctrine\Fixture;
  * @author Kevin Bond <kevinbond@gmail.com>
  *
  * @Entity
+ *
  * @Table(name="relations")
  */
 class Relation
@@ -14,7 +15,9 @@ class Relation
 
     /**
      * @Id
+     *
      * @Column(type="integer")
+     *
      * @GeneratedValue
      */
     public ?int $id;

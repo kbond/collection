@@ -9,7 +9,6 @@ use Zenstruck\Collection;
  *
  * @template K of array-key
  * @template V
- *
  * @implements Collection<K,V>
  */
 final class ChainCollection implements Collection
