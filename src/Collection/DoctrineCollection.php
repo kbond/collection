@@ -69,6 +69,9 @@ final class DoctrineCollection implements Collection, Inner
         $this->inner->clear();
     }
 
+    /**
+     * @template TMaybeContained
+     */
     public function contains($element): bool
     {
         return $this->inner->contains($element);
@@ -189,6 +192,9 @@ final class DoctrineCollection implements Collection, Inner
         return $this->inner->partition($p);
     }
 
+    /**
+     * @template TMaybeContained
+     */
     public function indexOf($element): int|string|bool
     {
         return $this->inner->indexOf($element);
