@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the zenstruck/collection package.
+ *
+ * (c) Kevin Bond <kevinbond@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Zenstruck\Collection\Doctrine\ORM;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -72,9 +81,7 @@ final class Result implements Collection
             return $collection;
         }
 
-        return new FactoryCollection($collection, function(mixed $result): mixed {
-            return $this->normalizeResult($result);
-        });
+        return new FactoryCollection($collection, fn(mixed $result): mixed => $this->normalizeResult($result));
     }
 
     /**

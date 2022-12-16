@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the zenstruck/collection package.
+ *
+ * (c) Kevin Bond <kevinbond@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Zenstruck\Collection\Tests;
 
 use PHPUnit\Framework\TestCase;
@@ -67,13 +76,9 @@ abstract class DoctrineCollectionTest extends TestCase
     {
         $this->collection->add('one');
         $this->collection->add('two');
-        $exists = $this->collection->exists(static function($k, $e) {
-            return 'one' === $e;
-        });
+        $exists = $this->collection->exists(static fn($k, $e) => 'one' === $e);
         $this->assertTrue($exists);
-        $exists = $this->collection->exists(static function($k, $e) {
-            return 'other' === $e;
-        });
+        $exists = $this->collection->exists(static fn($k, $e) => 'other' === $e);
         $this->assertFalse($exists);
     }
 
@@ -178,12 +183,8 @@ abstract class DoctrineCollectionTest extends TestCase
     {
         $this->collection[] = 'one';
         $this->collection[] = 'two';
-        $this->assertEquals($this->collection->forAll(static function($k, $e) {
-            return \is_string($e);
-        }), true);
-        $this->assertEquals($this->collection->forAll(static function($k, $e) {
-            return \is_array($e);
-        }), false);
+        $this->assertEquals($this->collection->forAll(static fn($k, $e) => \is_string($e)), true);
+        $this->assertEquals($this->collection->forAll(static fn($k, $e) => \is_array($e)), false);
     }
 
     /**
@@ -193,9 +194,7 @@ abstract class DoctrineCollectionTest extends TestCase
     {
         $this->collection[] = true;
         $this->collection[] = false;
-        $partition = $this->collection->partition(static function($k, $e) {
-            return true === $e;
-        });
+        $partition = $this->collection->partition(static fn($k, $e) => true === $e);
         $this->assertEquals($partition[0][0], true);
         $this->assertEquals($partition[1][0], false);
     }
