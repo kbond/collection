@@ -202,12 +202,13 @@ final class RepositoryTest extends TestCase
 
         $this->assertCount(5, $this->repo());
 
-        $results = \iterator_to_array($this->repo()->filter(Join::inner('relation')));
+        $results = $this->repo()->filter(Join::inner('relation'));
 
         $this->assertCount(3, $results);
-        $this->assertQueryCount(2, function() use ($results) {
-            $this->assertSame(2, $results[1]->relation->value);
-            $this->assertSame(3, $results[2]->relation->value);
+        $this->assertQueryCount(4, function() use ($results) {
+            foreach ($results as $i => $result) {
+                $this->assertSame($i + 1, $result->relation->value);
+            }
         });
     }
 
@@ -238,14 +239,19 @@ final class RepositoryTest extends TestCase
 
         $this->assertCount(5, $this->repo());
 
-        $results = \iterator_to_array($this->repo()->filter(Join::left('relation')));
+        $results = $this->repo()->filter(Join::left('relation'));
 
+        $relationValues = [];
         $this->assertCount(5, $results);
-        $this->assertQueryCount(2, function() use ($results) {
-            $this->assertSame(1, $results[1]->relation->value);
-            $this->assertSame(2, $results[2]->relation->value);
-            $this->assertNull($results[3]->relation);
+        $this->assertQueryCount(4, function() use ($results, &$relationValues) {
+            foreach ($results as $result) {
+                if ($result->relation) {
+                    $relationValues[] = $result->relation->value;
+                }
+            }
         });
+
+        $this->assertSame([1, 2, 3], $relationValues);
     }
 
     /**
@@ -276,13 +282,15 @@ final class RepositoryTest extends TestCase
 
         $this->assertCount(5, $this->repo());
 
-        $results = \iterator_to_array($this->repo()->filter(Join::inner('relation')->scope(
+        $results = $this->repo()->filter(Join::inner('relation')->scope(
             Spec::andX(Spec::gt('value', 1), Spec::lt('value', 3))
-        )));
+        ));
 
         $this->assertCount(1, $results);
-        $this->assertQueryCount(1, function() use ($results) {
-            $this->assertSame(2, $results[0]->relation->value);
+        $this->assertQueryCount(2, function() use ($results) {
+            foreach ($results as $result) {
+                $this->assertSame(2, $result->relation->value);
+            }
         });
     }
 
