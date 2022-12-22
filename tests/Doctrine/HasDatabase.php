@@ -63,7 +63,7 @@ trait HasDatabase
             return;
         }
 
-        $this->fail();
+        $this->fail(\sprintf('Expected %d queries but got %d.', $expected, \count($logger->queries)));
     }
 
     protected function persistEntities(int $count): void
