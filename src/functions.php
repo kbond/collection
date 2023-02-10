@@ -11,7 +11,6 @@
 
 namespace Zenstruck;
 
-use Zenstruck\Collection\ArrayCollection;
 use Zenstruck\Collection\LazyCollection;
 
 /**
@@ -25,17 +24,4 @@ use Zenstruck\Collection\LazyCollection;
 function collect(iterable|callable|null $source = null): LazyCollection
 {
     return new LazyCollection($source);
-}
-
-/**
- * @template K of array-key
- * @template V
- *
- * @param null|iterable<K,V>|callable():iterable<K,V> $source
- *
- * @return ArrayCollection<K,V>
- */
-function arr(iterable|callable|null $source = null): ArrayCollection
-{
-    return new ArrayCollection($source);
 }

@@ -13,7 +13,6 @@ namespace Zenstruck\Collection\Tests;
 
 use PHPUnit\Framework\TestCase;
 
-use function Zenstruck\arr;
 use function Zenstruck\collect;
 
 /**
@@ -27,13 +26,5 @@ final class FunctionsTest extends TestCase
     public function collect(): void
     {
         $this->assertSame(['foo'], collect(['foo'])->toArray());
-    }
-
-    /**
-     * @test
-     */
-    public function map(): void
-    {
-        $this->assertSame(['foo'], arr(['foo'])->all());
     }
 }
