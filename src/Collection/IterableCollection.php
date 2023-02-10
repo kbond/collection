@@ -228,7 +228,10 @@ trait IterableCollection
         return new ArrayCollection($this->iterableSource());
     }
 
-    private function iterableSource(): \Closure|iterable
+    /**
+     * @return iterable<K,V>
+     */
+    private function iterableSource(): iterable
     {
         return $this;
     }

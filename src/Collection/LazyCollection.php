@@ -116,8 +116,11 @@ final class LazyCollection implements Collection
         return $this->source;
     }
 
-    private function iterableSource(): \Closure|iterable
+    /**
+     * @return iterable<K,V>
+     */
+    private function iterableSource(): iterable
     {
-        return $this->source;
+        return \is_iterable($this->source) ? $this->source : ($this->source)();
     }
 }
