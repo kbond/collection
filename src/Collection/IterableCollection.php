@@ -225,6 +225,11 @@ trait IterableCollection
      */
     public function eager(): ArrayCollection
     {
-        return new ArrayCollection($this);
+        return new ArrayCollection($this->iterableSource());
+    }
+
+    private function iterableSource(): \Closure|iterable
+    {
+        return $this;
     }
 }

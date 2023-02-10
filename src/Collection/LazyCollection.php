@@ -37,10 +37,6 @@ final class LazyCollection implements Collection
     {
         $source ??= [];
 
-        if ($source instanceof \Generator) {
-            throw new \InvalidArgumentException('$source must not be a generator directly as generators cannot be rewound. Try wrapping in a closure.');
-        }
-
         if (\is_callable($source) && (!\is_iterable($source) || \is_array($source))) {
             $source = $source instanceof \Closure ? $source : \Closure::fromCallable($source);
         }
@@ -95,6 +91,10 @@ final class LazyCollection implements Collection
      */
     private function &normalizeSource(): iterable
     {
+        if ($this->source instanceof \Generator) {
+            throw new \InvalidArgumentException('$source must not be a generator directly as generators cannot be rewound. Try wrapping in a closure.');
+        }
+
         if (\is_iterable($this->source)) {
             return $this->source;
         }
@@ -113,6 +113,11 @@ final class LazyCollection implements Collection
 
         $this->source = $source;
 
+        return $this->source;
+    }
+
+    private function iterableSource(): \Closure|iterable
+    {
         return $this->source;
     }
 }
