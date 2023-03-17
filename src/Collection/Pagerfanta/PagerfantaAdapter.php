@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Zenstruck\Collection\Bridge;
+namespace Zenstruck\Collection\Pagerfanta;
 
 use Pagerfanta\Adapter\AdapterInterface;
 use Zenstruck\Collection;

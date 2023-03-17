@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Zenstruck\Collection\Tests\Bridge;
+namespace Zenstruck\Collection\Tests\Pagerfanta;
 
 use Pagerfanta\Pagerfanta;
 use PHPUnit\Framework\TestCase;
-use Zenstruck\Collection\Bridge\PagerfantaAdapter;
 use Zenstruck\Collection\LazyCollection;
+use Zenstruck\Collection\Pagerfanta\PagerfantaAdapter;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>

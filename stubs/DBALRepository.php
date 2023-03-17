@@ -1,7 +1,6 @@
 <?php
 
 use Zenstruck\Collection\Doctrine\DBAL\ObjectRepository;
-use Zenstruck\Collection\Doctrine\DBAL\Repository\Specification;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
@@ -11,6 +10,4 @@ use Zenstruck\Collection\Doctrine\DBAL\Repository\Specification;
  */
 abstract class DBALRepository extends ObjectRepository
 {
-    /** @use Specification<V> */
-    use Specification;
 }
