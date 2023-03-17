@@ -13,7 +13,6 @@ namespace Zenstruck\Collection\Tests\Doctrine\DBAL\Fixture;
 
 use Doctrine\DBAL\Connection;
 use Zenstruck\Collection\Doctrine\DBAL\ObjectRepository as BaseObjectRepository;
-use Zenstruck\Collection\Doctrine\DBAL\Repository\Specification;
 use Zenstruck\Collection\Tests\Doctrine\Fixture\Entity;
 
 /**
@@ -21,8 +20,6 @@ use Zenstruck\Collection\Tests\Doctrine\Fixture\Entity;
  */
 final class ObjectRepository extends BaseObjectRepository
 {
-    use Specification;
-
     private Connection $connection;
 
     public function __construct(Connection $connection)

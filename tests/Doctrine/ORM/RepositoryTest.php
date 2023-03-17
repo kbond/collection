@@ -15,21 +15,18 @@ use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\TestCase;
 use Zenstruck\Collection\Doctrine\Batch\CountableBatchIterator;
 use Zenstruck\Collection\Doctrine\Batch\CountableBatchProcessor;
-use Zenstruck\Collection\Doctrine\ORM\Specification\Join;
-use Zenstruck\Collection\Spec;
 use Zenstruck\Collection\Tests\Doctrine\Fixture\Entity;
 use Zenstruck\Collection\Tests\Doctrine\Fixture\Relation;
 use Zenstruck\Collection\Tests\Doctrine\HasDatabase;
 use Zenstruck\Collection\Tests\Doctrine\ORM\Fixture\DummyManagerRegistry;
 use Zenstruck\Collection\Tests\Doctrine\ORM\Fixture\KitchenSinkRepository;
-use Zenstruck\Collection\Tests\Doctrine\SpecificationRepositoryTests;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
 final class RepositoryTest extends TestCase
 {
-    use HasDatabase, SpecificationRepositoryTests;
+    use HasDatabase;
 
     /**
      * @test
@@ -191,157 +188,6 @@ final class RepositoryTest extends TestCase
 
         $this->assertInstanceOf(Entity::class, $result);
         $this->assertFalse($this->em->contains($result));
-    }
-
-    /**
-     * @test
-     */
-    public function filter_with_inner_join(): void
-    {
-        $this->persistEntitiesForJoinTest();
-
-        $this->assertCount(5, $this->repo());
-
-        $results = \iterator_to_array($this->repo()->filter(Join::inner('relation')));
-
-        $this->assertCount(3, $results);
-        $this->assertQueryCount(2, function() use ($results) {
-            $this->assertSame(2, $results[1]->relation->value);
-            $this->assertSame(3, $results[2]->relation->value);
-        });
-    }
-
-    /**
-     * @test
-     */
-    public function filter_with_eager_inner_join(): void
-    {
-        $this->persistEntitiesForJoinTest();
-
-        $this->assertCount(5, $this->repo());
-
-        $results = \iterator_to_array($this->repo()->filter(Join::inner('relation')->eager()));
-
-        $this->assertCount(3, $results);
-        $this->assertQueryCount(0, function() use ($results) {
-            $this->assertSame(2, $results[1]->relation->value);
-            $this->assertSame(3, $results[2]->relation->value);
-        });
-    }
-
-    /**
-     * @test
-     */
-    public function filter_with_left_join(): void
-    {
-        $this->persistEntitiesForJoinTest();
-
-        $this->assertCount(5, $this->repo());
-
-        $results = \iterator_to_array($this->repo()->filter(Join::left('relation')));
-
-        $this->assertCount(5, $results);
-        $this->assertQueryCount(2, function() use ($results) {
-            $this->assertSame(1, $results[1]->relation->value);
-            $this->assertSame(2, $results[2]->relation->value);
-            $this->assertNull($results[3]->relation);
-        });
-    }
-
-    /**
-     * @test
-     */
-    public function filter_with_eager_left_join(): void
-    {
-        $this->persistEntitiesForJoinTest();
-
-        $this->assertCount(5, $this->repo());
-
-        $results = \iterator_to_array($this->repo()->filter(Join::left('relation')->eager()));
-
-        $this->assertCount(5, $results);
-        $this->assertQueryCount(0, function() use ($results) {
-            $this->assertSame(1, $results[1]->relation->value);
-            $this->assertSame(2, $results[2]->relation->value);
-            $this->assertNull($results[3]->relation);
-        });
-    }
-
-    /**
-     * @test
-     */
-    public function filter_with_join_and_scoped_select(): void
-    {
-        $this->persistEntitiesForJoinTest();
-
-        $this->assertCount(5, $this->repo());
-
-        $results = \iterator_to_array($this->repo()->filter(Join::inner('relation')->scope(
-            Spec::andX(Spec::gt('value', 1), Spec::lt('value', 3))
-        )));
-
-        $this->assertCount(1, $results);
-        $this->assertQueryCount(1, function() use ($results) {
-            $this->assertSame(2, $results[0]->relation->value);
-        });
-    }
-
-    /**
-     * @test
-     */
-    public function filter_with_join_and_eager_scoped_select(): void
-    {
-        $this->persistEntitiesForJoinTest();
-
-        $this->assertCount(5, $this->repo());
-
-        $results = \iterator_to_array($this->repo()->filter(Join::inner('relation')->eager()->scope(
-            Spec::andX(Spec::gt('value', 1), Spec::lt('value', 3))
-        )));
-
-        $this->assertCount(1, $results);
-        $this->assertQueryCount(0, function() use ($results) {
-            $this->assertSame(2, $results[0]->relation->value);
-        });
-    }
-
-    /**
-     * @test
-     */
-    public function filter_with_left_anti_join(): void
-    {
-        $this->persistEntitiesForJoinTest();
-
-        $this->assertCount(5, $this->repo());
-
-        $results = \iterator_to_array($this->repo()->filter(Join::anti('relation')));
-
-        $this->assertCount(2, $results);
-    }
-
-    /**
-     * @test
-     */
-    public function filter_with_join_and_multiple_scope(): void
-    {
-        $this->persistEntitiesForJoinTest();
-
-        $this->assertCount(5, $this->repo());
-
-        $results = $this->repo()->filter(
-            Spec::andX(
-                Join::inner('relation')->eager()->scope(Spec::gt('value', 1)),
-                Join::inner('relation')->eager()->scope(Spec::lt('value', 3))
-            )
-        );
-
-        $this->assertCount(1, $results);
-
-        $results = \iterator_to_array($results);
-
-        $this->assertQueryCount(0, function() use ($results) {
-            $this->assertSame(2, $results[0]->relation->value);
-        });
     }
 
     /**
