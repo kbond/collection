@@ -22,8 +22,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Zenstruck\Collection;
 use Zenstruck\Collection\ArrayCollection;
 use Zenstruck\Collection\CallbackCollection;
-use Zenstruck\Collection\Doctrine\Batch\BatchIterator;
-use Zenstruck\Collection\Doctrine\Batch\BatchProcessor;
+use Zenstruck\Collection\Doctrine\Batch;
 use Zenstruck\Collection\FactoryCollection;
 use Zenstruck\Collection\IterableCollection;
 use Zenstruck\Collection\LazyCollection;
@@ -84,30 +83,25 @@ final class Result implements Collection
         return new FactoryCollection($collection, fn(mixed $result): mixed => $this->normalizeResult($result));
     }
 
-    /**
-     * By default, iterating detaches objects from the entity manager as they are iterated
-     * to conserve memory. To change this behaviour, override this method and return
-     * {@see rawIterator()}.
-     */
     public function getIterator(): \Traversable
     {
-        return $this->batch();
+        return $this->callbackCollection();
     }
 
     /**
-     * @return \Traversable<int,V>
+     * @return \Traversable<V>
      */
     public function batch(int $chunkSize = 100): \Traversable
     {
-        return BatchIterator::for($this->callbackCollection(), $this->em(), $chunkSize);
+        return Batch::iterate($this->callbackCollection(), $this->em(), $chunkSize);
     }
 
     /**
-     * @return \Traversable<int,V>
+     * @return \Traversable<V>
      */
     public function batchProcess(int $chunkSize = 100): \Traversable
     {
-        return BatchProcessor::for($this->callbackCollection(), $this->em(), $chunkSize);
+        return Batch::process($this->callbackCollection(), $this->em(), $chunkSize);
     }
 
     /**

@@ -11,14 +11,26 @@
 
 namespace Zenstruck\Collection\Doctrine\Batch;
 
+use Doctrine\Persistence\ObjectManager;
+
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
+ *
+ * @internal
  *
  * @template V
  * @extends BatchProcessor<V>
  */
 final class CountableBatchProcessor extends BatchProcessor implements \Countable
 {
+    /**
+     * @param array<V>|(iterable<V>&\Countable) $items
+     */
+    public function __construct(iterable $items, ObjectManager $om, int $chunkSize = 100)
+    {
+        parent::__construct($items, $om, $chunkSize);
+    }
+
     public function count(): int
     {
         return \is_countable($this->items) ? \count($this->items) : throw new \LogicException('Not countable.');

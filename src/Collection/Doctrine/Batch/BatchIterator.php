@@ -16,38 +16,18 @@ use Doctrine\Persistence\ObjectManager;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  *
+ * @internal
+ *
  * @template V
  * @implements \IteratorAggregate<int,V>
  */
 class BatchIterator implements \IteratorAggregate
 {
-    /** @var iterable<int,V> */
-    protected iterable $items;
-    private ObjectManager $om;
-    private int $chunkSize;
-
     /**
-     * @param iterable<int,V> $items
+     * @param iterable<V> $items
      */
-    private function __construct(iterable $items, ObjectManager $om, int $chunkSize = 100)
+    public function __construct(protected iterable $items, private ObjectManager $om, private int $chunkSize = 100)
     {
-        $this->items = $items;
-        $this->om = $om;
-        $this->chunkSize = $chunkSize;
-    }
-
-    /**
-     * @param iterable<int,V> $items
-     *
-     * @return self<V>|CountableBatchIterator<V>
-     */
-    final public static function for(iterable $items, ObjectManager $om, int $chunkSize = 100): self|CountableBatchIterator
-    {
-        if (\is_countable($items)) {
-            return new CountableBatchIterator($items, $om, $chunkSize);
-        }
-
-        return new self($items, $om, $chunkSize);
     }
 
     final public function getIterator(): \Traversable

@@ -18,45 +18,23 @@ use Doctrine\Persistence\ObjectManager;
  * @author Marco Pivetta <ocramius@gmail.com>
  * @author Kevin Bond <kevinbond@gmail.com>
  *
+ * @internal
+ *
  * @template V
- * @implements \IteratorAggregate<int,V>
+ * @implements \IteratorAggregate<V>
  */
 class BatchProcessor implements \IteratorAggregate
 {
-    /** @var iterable<int,V> */
-    protected iterable $items;
-    private ObjectManager $om;
-    private int $chunkSize;
-
     /**
-     * @param iterable<int,V> $items
+     * @param iterable<V> $items
      */
-    private function __construct(iterable $items, ObjectManager $om, int $chunkSize = 100)
+    public function __construct(protected iterable $items, private ObjectManager $om, private int $chunkSize = 100)
     {
-        $this->items = $items;
-        $this->om = $om;
-        $this->chunkSize = $chunkSize;
-    }
-
-    /**
-     * @param iterable<int,V> $items
-     *
-     * @return self<V>|CountableBatchProcessor<V>
-     */
-    final public static function for(iterable $items, ObjectManager $om, int $chunkSize = 100): self|CountableBatchProcessor
-    {
-        if (\is_countable($items)) {
-            return new CountableBatchProcessor($items, $om, $chunkSize);
-        }
-
-        return new self($items, $om, $chunkSize);
     }
 
     final public function getIterator(): \Traversable
     {
         if ($this->om instanceof EntityManagerInterface) {
-            $logger = $this->om->getConfiguration()->getSQLLogger();
-            $this->om->getConfiguration()->setSQLLogger(null);
             $this->om->beginTransaction();
         }
 
@@ -80,7 +58,6 @@ class BatchProcessor implements \IteratorAggregate
 
         if ($this->om instanceof EntityManagerInterface) {
             $this->om->commit();
-            $this->om->getConfiguration()->setSQLLogger($logger);
         }
     }
 

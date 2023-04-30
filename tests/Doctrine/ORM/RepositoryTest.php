@@ -180,14 +180,14 @@ final class RepositoryTest extends TestCase
     /**
      * @test
      */
-    public function detaches_entities_from_em_on_iterate(): void
+    public function does_not_detach_entities_from_em_on_iterate(): void
     {
         $iterator = $this->createWithItems(3);
 
         $result = \iterator_to_array($iterator)[0];
 
         $this->assertInstanceOf(Entity::class, $result);
-        $this->assertFalse($this->em->contains($result));
+        $this->assertTrue($this->em->contains($result));
     }
 
     /**

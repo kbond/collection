@@ -12,8 +12,7 @@
 namespace Zenstruck\Collection\Tests\Doctrine\Batch;
 
 use PHPUnit\Framework\TestCase;
-use Zenstruck\Collection\Doctrine\Batch\BatchIterator;
-use Zenstruck\Collection\Doctrine\Batch\CountableBatchIterator;
+use Zenstruck\Collection\Doctrine\Batch;
 use Zenstruck\Collection\Tests\Doctrine\Fixture\Entity;
 use Zenstruck\Collection\Tests\Doctrine\HasDatabase;
 
@@ -30,7 +29,7 @@ final class BatchIteratorTest extends TestCase
     public function detaches_entities_from_em_on_iterate(): void
     {
         $this->persistEntities(2);
-        $iterator = BatchIterator::for($this->em->getRepository(Entity::class)->findAll(), $this->em, 1);
+        $iterator = Batch::iterate($this->em->getRepository(Entity::class)->findAll(), $this->em, 1);
 
         $result = \iterator_to_array($iterator)[0];
 
@@ -43,17 +42,6 @@ final class BatchIteratorTest extends TestCase
      */
     public function countable_iterator(): void
     {
-        $this->assertCount(3, BatchIterator::for([1, 2, 3], $this->em));
-    }
-
-    /**
-     * @test
-     */
-    public function for_returns_the_proper_iterator(): void
-    {
-        $this->assertTrue(\is_countable(BatchIterator::for(['foo'], $this->em)));
-        $this->assertFalse(\is_countable(BatchIterator::for((static function() { yield 1; })(), $this->em)));
-        $this->assertTrue(\is_countable(CountableBatchIterator::for(['foo'], $this->em)));
-        $this->assertFalse(\is_countable(CountableBatchIterator::for((static function() { yield 1; })(), $this->em)));
+        $this->assertCount(3, Batch::iterate([1, 2, 3], $this->em));
     }
 }

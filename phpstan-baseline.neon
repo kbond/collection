@@ -16,11 +16,6 @@ parameters:
 			path: src/Collection/ArrayCollection.php
 
 		-
-			message: "#^Variable \\$logger might not be defined\\.$#"
-			count: 1
-			path: src/Collection/Doctrine/Batch/BatchProcessor.php
-
-		-
 			message: "#^Parameter \\#2 \\$class of method Doctrine\\\\ORM\\\\EntityRepository\\<V of object\\>\\:\\:__construct\\(\\) expects Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadata\\<V of object\\>, Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadata\\<object\\> given\\.$#"
 			count: 1
 			path: src/Collection/Doctrine/ORM/ServiceEntityRepository.php
