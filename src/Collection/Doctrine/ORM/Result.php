@@ -274,24 +274,10 @@ final class Result implements Collection
         return new ArrayCollection($this->toArray());
     }
 
-    private function normalizeResult(mixed $result): mixed
-    {
-        if (!$this->resultNormalizer) {
-            return $result;
-        }
-
-        return ($this->resultNormalizer)($result);
-    }
-
-    private function em(): EntityManagerInterface
-    {
-        return $this->query->getEntityManager();
-    }
-
     /**
      * @return iterable<mixed>
      */
-    final protected function rawIterator(): iterable
+    protected function rawIterator(): iterable
     {
         if ($this->resultNormalizer || Query::HYDRATE_SCALAR_COLUMN === $this->query->getHydrationMode()) {
             foreach ($this->pages(20) as $page) {
@@ -310,6 +296,20 @@ final class Result implements Collection
 
             throw $e;
         }
+    }
+
+    private function normalizeResult(mixed $result): mixed
+    {
+        if (!$this->resultNormalizer) {
+            return $result;
+        }
+
+        return ($this->resultNormalizer)($result);
+    }
+
+    private function em(): EntityManagerInterface
+    {
+        return $this->query->getEntityManager();
     }
 
     /**
