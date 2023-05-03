@@ -83,9 +83,14 @@ final class Result implements Collection
         return new FactoryCollection($collection, fn(mixed $result): mixed => $this->normalizeResult($result));
     }
 
+    /**
+     * By default, iterating detaches objects from the entity manager as they are iterated
+     * to conserve memory. To change this behaviour, override this method and return
+     * {@see rawIterator()}.
+     */
     public function getIterator(): \Traversable
     {
-        return $this->callbackCollection();
+        return $this->batch();
     }
 
     /**
@@ -286,7 +291,7 @@ final class Result implements Collection
     /**
      * @return iterable<mixed>
      */
-    private function rawIterator(): iterable
+    final protected function rawIterator(): iterable
     {
         if ($this->resultNormalizer || Query::HYDRATE_SCALAR_COLUMN === $this->query->getHydrationMode()) {
             foreach ($this->pages(20) as $page) {
