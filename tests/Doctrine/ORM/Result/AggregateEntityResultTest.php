@@ -81,14 +81,14 @@ final class AggregateEntityResultTest extends EntityResultTest
     /**
      * @test
      */
-    public function does_not_detach_entities_from_em_on_iterate(): void
+    public function detaches_entities_from_em_on_iterate(): void
     {
         $iterator = $this->createWithItems(3);
 
         $result = \iterator_to_array($iterator)[0];
 
         $this->assertInstanceOf(EntityWithAggregates::class, $result);
-        $this->assertTrue($this->em->contains($result->entity()));
+        $this->assertFalse($this->em->contains($result->entity()));
     }
 
     /**
