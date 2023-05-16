@@ -16,7 +16,7 @@ use Zenstruck\Collection;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  *
- * @template K of array-key
+ * @template K
  * @template V
  * @implements \IteratorAggregate<int,Page<K,V>>
  */

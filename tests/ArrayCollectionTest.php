@@ -49,6 +49,18 @@ final class ArrayCollectionTest extends TestCase
     /**
      * @test
      */
+    public function key_by_stringable_key(): void
+    {
+        $items = $this->createWithItems(3);
+
+        $this->assertSame(['k0', 'k1', 'k2'], \array_keys(\iterator_to_array($items->keyBy(
+            fn($value, $key) => new Stringable('k'.$key)
+        ))));
+    }
+
+    /**
+     * @test
+     */
     public function keys(): void
     {
         $this->assertSame(

@@ -17,17 +17,16 @@ use Zenstruck\Collection;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  *
- * @template K of array-key
  * @template V
  * @implements AdapterInterface<V>
  */
 final class PagerfantaAdapter implements AdapterInterface
 {
-    /** @var Collection<K,V> */
+    /** @var Collection<mixed,V> */
     private Collection $collection;
 
     /**
-     * @param Collection<K,V> $collection
+     * @param Collection<mixed,V> $collection
      */
     public function __construct(Collection $collection)
     {

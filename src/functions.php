@@ -14,7 +14,7 @@ namespace Zenstruck;
 use Zenstruck\Collection\LazyCollection;
 
 /**
- * @template K of array-key
+ * @template K
  * @template V
  *
  * @param null|iterable<K,V>|callable():iterable<K,V> $source

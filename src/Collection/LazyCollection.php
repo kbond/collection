@@ -17,7 +17,7 @@ use Zenstruck\Collection;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  *
- * @template K of array-key
+ * @template K
  * @template V
  * @implements Collection<K,V>
  */
@@ -40,7 +40,7 @@ final class LazyCollection implements Collection
         $source ??= [];
 
         if (\is_callable($source) && (!\is_iterable($source) || \is_array($source))) {
-            $source = $source instanceof \Closure ? $source : \Closure::fromCallable($source); // @phpstan-ignore-line
+            $source = $source instanceof \Closure ? $source : \Closure::fromCallable($source);
         }
 
         $this->source = $source;

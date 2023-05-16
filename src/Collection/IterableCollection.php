@@ -17,7 +17,7 @@ namespace Zenstruck\Collection;
  *
  * @author Kevin Bond <kevinbond@gmail.com>
  *
- * @template K of array-key
+ * @template K
  * @template V
  */
 trait IterableCollection
@@ -71,15 +71,13 @@ trait IterableCollection
     }
 
     /**
-     * @return LazyCollection<array-key,V>
+     * @return LazyCollection<K,V>
      */
     public function keyBy(callable $function): LazyCollection
     {
         return new LazyCollection(function() use ($function) {
             foreach ($this as $key => $value) {
-                $key = $function($value, $key);
-
-                yield $key instanceof \Stringable ? (string) $key : $key => $value;
+                yield $function($value, $key) => $value;
             }
         });
     }
@@ -174,9 +172,6 @@ trait IterableCollection
         exit;
     }
 
-    /**
-     * @return ArrayCollection<K,V>
-     */
     public function eager(): ArrayCollection
     {
         return new ArrayCollection($this->iterableSource());

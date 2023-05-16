@@ -18,7 +18,7 @@ use Zenstruck\Collection\Pages;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  *
- * @template K of array-key
+ * @template K
  * @template V
  * @extends \IteratorAggregate<K,V>
  */
@@ -41,11 +41,11 @@ interface Collection extends \IteratorAggregate, \Countable
     public function map(callable $function): self;
 
     /**
-     * @template T of array-key|\Stringable
+     * @template T
      *
      * @param callable(V,K):T $function
      *
-     * @return self<array-key,V>
+     * @return self<T,V>
      */
     public function keyBy(callable $function): self;
 

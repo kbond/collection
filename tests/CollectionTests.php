@@ -12,7 +12,6 @@
 namespace Zenstruck\Collection\Tests;
 
 use Zenstruck\Collection;
-use Zenstruck\Collection\Tests\Fixture\Stringable;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
@@ -107,18 +106,6 @@ trait CollectionTests
         $items = $this->createWithItems(3);
 
         $this->assertSame(['k0', 'k1', 'k2'], \array_keys(\iterator_to_array($items->keyBy(fn($value, $key) => 'k'.$key))));
-    }
-
-    /**
-     * @test
-     */
-    public function key_by_stringable_key(): void
-    {
-        $items = $this->createWithItems(3);
-
-        $this->assertSame(['k0', 'k1', 'k2'], \array_keys(\iterator_to_array($items->keyBy(
-            fn($value, $key) => new Stringable('k'.$key)
-        ))));
     }
 
     /**

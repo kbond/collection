@@ -424,7 +424,7 @@ final class ArrayCollection implements Collection, \ArrayAccess
         return \implode($separator, $this->source);
     }
 
-    public function eager(): ArrayCollection
+    public function eager(): self
     {
         return $this;
     }
