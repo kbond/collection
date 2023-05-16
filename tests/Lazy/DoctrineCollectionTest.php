@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the zenstruck/collection package.
+ *
+ * (c) Kevin Bond <kevinbond@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Zenstruck\Collection\Tests\Lazy;
 
 use Doctrine\Common\Collections\Criteria;
@@ -64,6 +73,18 @@ final class DoctrineCollectionTest extends LazyCollectionTest
         $this->assertFalse($persistentCollection->isInitialized());
     }
 
+    protected function expectedValueAt(int $position): object
+    {
+        return new Entity("value {$position}", $position);
+    }
+
+    protected function createWithItems(int $count): LazyCollection
+    {
+        $this->persistEntities($count);
+
+        return new LazyCollection($this->em->getRepository(Entity::class)->matching(new Criteria()));
+    }
+
     /**
      * @return array{0:PersistentCollection,1:LazyCollection}
      */
@@ -80,19 +101,7 @@ final class DoctrineCollectionTest extends LazyCollectionTest
 
         return [
             $persistentCollection = $this->em->find(Relation::class, 1)->getEntities(),
-            new LazyCollection($persistentCollection)
+            new LazyCollection($persistentCollection),
         ];
-    }
-
-    protected function expectedValueAt(int $position): object
-    {
-        return new Entity("value {$position}", $position);
-    }
-
-    protected function createWithItems(int $count): LazyCollection
-    {
-        $this->persistEntities($count);
-
-        return new LazyCollection($this->em->getRepository(Entity::class)->matching(new Criteria()));
     }
 }
