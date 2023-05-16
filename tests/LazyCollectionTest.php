@@ -24,9 +24,9 @@ abstract class LazyCollectionTest extends TestCase
     /**
      * @test
      */
-    public function can_covert_to_array(): void
+    public function can_convert_to_array(): void
     {
-        $this->assertSame(
+        $this->assertEquals(
             [
                 0 => $this->expectedValueAt(1),
                 1 => $this->expectedValueAt(2),

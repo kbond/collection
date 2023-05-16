@@ -11,6 +11,10 @@
 
 namespace Zenstruck\Collection\Tests\Doctrine\Fixture;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  *
@@ -36,9 +40,20 @@ class Relation
      */
     public int $value;
 
+    /**
+     * @OneToMany(targetEntity="Entity", mappedBy="relation", fetch="EXTRA_LAZY")
+     */
+    private Collection $entities;
+
     public function __construct(int $value, ?int $id = null)
     {
         $this->id = $id;
         $this->value = $value;
+        $this->entities = new ArrayCollection();
+    }
+
+    public function getEntities(): Collection
+    {
+        return $this->entities;
     }
 }

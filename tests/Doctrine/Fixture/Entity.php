@@ -37,7 +37,7 @@ class Entity
     public string $value;
 
     /**
-     * @ManyToOne(targetEntity="Relation", cascade={"persist"})
+     * @ManyToOne(targetEntity="Relation", cascade={"persist"}, inversedBy="entities")
      * @JoinColumn(name="relation_id", referencedColumnName="id", nullable=true)
      */
     public ?Relation $relation = null;

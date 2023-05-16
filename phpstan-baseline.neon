@@ -26,11 +26,6 @@ parameters:
 			path: src/Collection/LazyCollection.php
 
 		-
-			message: "#^Parameter \\#1 \\$array of function array_slice expects array, iterable\\<K of \\(int\\|string\\), V\\> given\\.$#"
-			count: 1
-			path: src/Collection/LazyCollection.php
-
-		-
 			message: "#^Parameter \\#1 \\$callback of static method Closure\\:\\:fromCallable\\(\\) expects callable\\(\\)\\: mixed, array\\|\\(callable\\(\\)\\: iterable\\<K of \\(int\\|string\\), V\\>\\) given\\.$#"
 			count: 1
 			path: src/Collection/LazyCollection.php
