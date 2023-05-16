@@ -16,29 +16,24 @@ use Zenstruck\Collection;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  *
+ * @template K of array-key
  * @template V
- * @implements \IteratorAggregate<int,Page<V>>
+ * @implements \IteratorAggregate<int,Page<K,V>>
  */
 final class Pages implements \IteratorAggregate, \Countable
 {
-    /** @var Collection<int,V> */
-    private Collection $collection;
-    private int $limit;
-
-    /** @var Page<V> */
+    /** @var Page<K,V> */
     private Page $page1;
 
     /**
-     * @param Collection<int,V> $collection
+     * @param Collection<K,V> $collection
      */
-    public function __construct(Collection $collection, int $limit = Page::DEFAULT_LIMIT)
+    public function __construct(private Collection $collection, private int $limit = Page::DEFAULT_LIMIT)
     {
-        $this->collection = $collection;
-        $this->limit = $limit;
     }
 
     /**
-     * @return Page<V>
+     * @return Page<K,V>
      */
     public function get(int $page): Page
     {
@@ -68,7 +63,7 @@ final class Pages implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @return Page<V>
+     * @return Page<K,V>
      */
     private function page1(): Page
     {

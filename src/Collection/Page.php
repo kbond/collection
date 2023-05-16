@@ -16,8 +16,9 @@ use Zenstruck\Collection;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  *
+ * @template K of array-key
  * @template V
- * @implements \IteratorAggregate<int,V>
+ * @implements \IteratorAggregate<K,V>
  */
 final class Page implements \IteratorAggregate, \Countable
 {
@@ -124,7 +125,7 @@ final class Page implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @return Collection<int,V>
+     * @return Collection<K,V>
      */
     private function getPage(): Collection
     {

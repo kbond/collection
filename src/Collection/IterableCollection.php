@@ -101,7 +101,7 @@ trait IterableCollection
     }
 
     /**
-     * @return Page<V>
+     * @return Page<K,V>
      */
     public function paginate(int $page = 1, int $limit = Page::DEFAULT_LIMIT): Page
     {
@@ -109,7 +109,7 @@ trait IterableCollection
     }
 
     /**
-     * @return Pages<V>
+     * @return Pages<K,V>
      */
     public function pages(int $limit = Page::DEFAULT_LIMIT): Pages
     {
