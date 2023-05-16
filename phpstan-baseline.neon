@@ -21,17 +21,7 @@ parameters:
 			path: src/Collection/Doctrine/ORM/ServiceEntityRepository.php
 
 		-
-			message: "#^Parameter \\#1 \\$p of method Doctrine\\\\Common\\\\Collections\\\\Collection\\<K of \\(int\\|string\\),V\\>\\:\\:filter\\(\\) expects Closure\\(V\\)\\: bool, Closure\\(V, K of \\(int\\|string\\)\\)\\: bool given\\.$#"
-			count: 1
-			path: src/Collection/DoctrineCollection.php
-
-		-
 			message: "#^Method Zenstruck\\\\Collection\\\\LazyCollection\\:\\:toArray\\(\\) should return array\\<K of \\(int\\|string\\), V\\> but returns iterable\\<K of \\(int\\|string\\), V\\>\\.$#"
-			count: 1
-			path: src/Collection/LazyCollection.php
-
-		-
-			message: "#^Parameter \\#1 \\$array of function array_slice expects array, iterable\\<K of \\(int\\|string\\), V\\> given\\.$#"
 			count: 1
 			path: src/Collection/LazyCollection.php
 

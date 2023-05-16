@@ -11,35 +11,27 @@
 
 namespace Zenstruck\Collection\Tests\Doctrine\Fixture;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
- *
- * @Entity
- *
- * @Table(name="entities")
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'entities')]
 class Entity
 {
     public const TABLE = 'entities';
 
-    /**
-     * @Id
-     *
-     * @Column(type="integer")
-     *
-     * @GeneratedValue
-     */
+    #[ORM\Id]
+    #[ORM\Column]
+    #[ORM\GeneratedValue]
     public ?int $id;
 
-    /**
-     * @Column(type="string")
-     */
+    #[ORM\Column]
     public string $value;
 
-    /**
-     * @ManyToOne(targetEntity="Relation", cascade={"persist"})
-     * @JoinColumn(name="relation_id", referencedColumnName="id", nullable=true)
-     */
+    #[ORM\ManyToOne(targetEntity: Relation::class, cascade: ['persist'], inversedBy: 'entities')]
+    #[ORM\JoinColumn(name: 'relation_id', referencedColumnName: 'id', nullable: true)]
     public ?Relation $relation = null;
 
     public function __construct(string $value, ?int $id = null)

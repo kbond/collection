@@ -11,6 +11,7 @@
 
 namespace Zenstruck\Collection;
 
+use Doctrine\Common\Collections\AbstractLazyCollection;
 use Zenstruck\Collection;
 
 /**
@@ -25,6 +26,7 @@ final class LazyCollection implements Collection
     /** @use IterableCollection<K,V> */
     use IterableCollection {
         take as private traitTake;
+        first as private traitFirst;
     }
 
     /** @var iterable<K,V>|\Closure():iterable<K,V> */
@@ -44,13 +46,30 @@ final class LazyCollection implements Collection
         $this->source = $source;
     }
 
+    public function first(mixed $default = null): mixed
+    {
+        $source = &$this->normalizeSource();
+
+        if ($source instanceof AbstractLazyCollection && !$source->isInitialized()) {
+            return $source->slice(0, 1)[0] ?? $default;
+        }
+
+        return $this->traitFirst($default);
+    }
+
     /**
      * @return self<K,V>
      */
     public function take(int $limit, int $offset = 0): self
     {
-        if (\is_array($source = &$this->normalizeSource())) {
+        $source = &$this->normalizeSource();
+
+        if (\is_array($source)) {
             return new self(\array_slice($source, $offset, $limit, true));
+        }
+
+        if ($source instanceof AbstractLazyCollection && !$source->isInitialized()) {
+            return new self($source->slice($offset, $limit));
         }
 
         return $this->traitTake($limit, $offset);
@@ -71,6 +90,14 @@ final class LazyCollection implements Collection
     public function getIterator(): \Traversable
     {
         $source = &$this->normalizeSource();
+
+        if ($source instanceof AbstractLazyCollection && !$source->isInitialized()) {
+            foreach ($this->pages() as $page) {
+                yield from $page;
+            }
+
+            return;
+        }
 
         foreach ($source as $key => $value) {
             yield $key => $value;
