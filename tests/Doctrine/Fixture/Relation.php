@@ -17,32 +17,22 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
- *
- * @Entity
- *
- * @Table(name="relations")
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'relations')]
 class Relation
 {
     public const TABLE = 'relations';
 
-    /**
-     * @Id
-     *
-     * @Column(type="integer")
-     *
-     * @GeneratedValue
-     */
+    #[ORM\Id]
+    #[ORM\Column]
+    #[ORM\GeneratedValue]
     public ?int $id;
 
-    /**
-     * @Column(type="string")
-     */
+    #[ORM\Column]
     public int $value;
 
-    /**
-     * @OneToMany(targetEntity="Entity", mappedBy="relation", fetch="EXTRA_LAZY")
-     */
+    #[ORM\OneToMany(mappedBy: 'relation', targetEntity: Entity::class, fetch: 'EXTRA_LAZY')]
     private Collection $entities;
 
     public function __construct(int $value, ?int $id = null)
