@@ -21,11 +21,6 @@ parameters:
 			path: src/Collection/Doctrine/ORM/ServiceEntityRepository.php
 
 		-
-			message: "#^Method Zenstruck\\\\Collection\\\\LazyCollection\\:\\:toArray\\(\\) should return array\\<K of \\(int\\|string\\), V\\> but returns iterable\\<K of \\(int\\|string\\), V\\>\\.$#"
-			count: 1
-			path: src/Collection/LazyCollection.php
-
-		-
 			message: "#^Parameter \\#1 \\$callback of static method Closure\\:\\:fromCallable\\(\\) expects callable\\(\\)\\: mixed, array\\|\\(callable\\(\\)\\: iterable\\<K of \\(int\\|string\\), V\\>\\) given\\.$#"
 			count: 1
 			path: src/Collection/LazyCollection.php

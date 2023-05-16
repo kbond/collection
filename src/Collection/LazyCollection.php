@@ -75,18 +75,6 @@ final class LazyCollection implements Collection
         return $this->traitTake($limit, $offset);
     }
 
-    /**
-     * @return array<K,V>
-     */
-    public function toArray(): array
-    {
-        if (\is_array($source = &$this->normalizeSource())) {
-            return $source;
-        }
-
-        return \iterator_to_array($source);
-    }
-
     public function getIterator(): \Traversable
     {
         $source = &$this->normalizeSource();
