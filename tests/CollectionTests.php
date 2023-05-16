@@ -134,32 +134,6 @@ trait CollectionTests
     /**
      * @test
      */
-    public function map_with_keys(): void
-    {
-        $items = $this->createWithItems(3);
-
-        $this->assertSame(
-            ['k0' => 'v0', 'k1' => 'v1', 'k2' => 'v2'],
-            \iterator_to_array($items->mapWithKeys(fn($value, $key) => yield 'k'.$key => 'v'.$key))
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function map_with_keys_stringable_key(): void
-    {
-        $items = $this->createWithItems(3);
-
-        $this->assertSame(
-            ['k0' => 'v0', 'k1' => 'v1', 'k2' => 'v2'],
-            \iterator_to_array($items->mapWithKeys(fn($value, $key) => yield new Stringable('k'.$key) => 'v'.$key))
-        );
-    }
-
-    /**
-     * @test
-     */
     public function first(): void
     {
         $items = $this->createWithItems(2);

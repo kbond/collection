@@ -101,27 +101,6 @@ trait IterableCollection
     }
 
     /**
-     * @template T of array-key|\Stringable
-     * @template U
-     *
-     * @param callable(V,K):iterable<T,U> $function
-     *
-     * @return LazyCollection<array-key,U>
-     */
-    public function mapWithKeys(callable $function): LazyCollection
-    {
-        return new LazyCollection(function() use ($function) {
-            foreach ($this as $key => $value) {
-                foreach ($function($value, $key) as $newKey => $newValue) {
-                    yield $newKey instanceof \Stringable ? (string) $newKey : $newKey => $newValue;
-
-                    continue 2;
-                }
-            }
-        });
-    }
-
-    /**
      * @return Page<V>
      */
     public function paginate(int $page = 1, int $limit = Page::DEFAULT_LIMIT): Page

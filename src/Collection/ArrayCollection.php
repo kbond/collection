@@ -225,29 +225,6 @@ final class ArrayCollection implements Collection, \ArrayAccess
     }
 
     /**
-     * @template T of array-key|\Stringable
-     * @template U
-     *
-     * @param callable(V,K):iterable<T,U> $function
-     *
-     * @return self<array-key,U>
-     */
-    public function mapWithKeys(callable $function): self
-    {
-        $results = [];
-
-        foreach ($this->source as $key => $value) {
-            foreach ($function($value, $key) as $newKey => $newValue) {
-                $results[$newKey instanceof \Stringable ? (string) $newKey : $newKey] = $newValue;
-
-                continue 2;
-            }
-        }
-
-        return new self($results);
-    }
-
-    /**
      * @return self<K,V>
      */
     public function sort(int|callable $flags = \SORT_REGULAR): self

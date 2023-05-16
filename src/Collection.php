@@ -38,16 +38,6 @@ interface Collection extends \IteratorAggregate, \Countable
 
     /**
      * @template T of array-key|\Stringable
-     * @template U
-     *
-     * @param callable(V,K):iterable<T,U> $function
-     *
-     * @return self<array-key,U>
-     */
-    public function mapWithKeys(callable $function): self;
-
-    /**
-     * @template T of array-key|\Stringable
      *
      * @param callable(V,K):T $function
      *
