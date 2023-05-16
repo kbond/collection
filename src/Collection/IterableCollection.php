@@ -125,14 +125,6 @@ trait IterableCollection
         return $default;
     }
 
-    /**
-     * @template D
-     *
-     * @param callable(V,K):bool $predicate
-     * @param D                  $default
-     *
-     * @return V|D
-     */
     public function firstWhere(callable $predicate, mixed $default = null): mixed
     {
         foreach ($this as $key => $value) {

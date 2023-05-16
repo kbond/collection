@@ -11,6 +11,10 @@
 
 namespace Zenstruck;
 
+use Zenstruck\Collection\ArrayCollection;
+use Zenstruck\Collection\Page;
+use Zenstruck\Collection\Pages;
+
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  *
@@ -60,6 +64,16 @@ interface Collection extends \IteratorAggregate, \Countable
     public function first(mixed $default = null): mixed;
 
     /**
+     * @template D
+     *
+     * @param callable(V,K):bool $predicate
+     * @param D                  $default
+     *
+     * @return V|D
+     */
+    public function firstWhere(callable $predicate, mixed $default = null): mixed;
+
+    /**
      * @template T
      *
      * @param callable(T,V,K):T $function
@@ -68,4 +82,21 @@ interface Collection extends \IteratorAggregate, \Countable
      * @return T
      */
     public function reduce(callable $function, mixed $initial = null): mixed;
+
+    public function isEmpty(): bool;
+
+    /**
+     * @return ArrayCollection<K&array-key,V>
+     */
+    public function eager(): ArrayCollection;
+
+    /**
+     * @return Page<K,V>
+     */
+    public function paginate(int $page = 1, int $limit = Page::DEFAULT_LIMIT): Page;
+
+    /**
+     * @return Pages<K,V>
+     */
+    public function pages(int $limit = Page::DEFAULT_LIMIT): Pages;
 }

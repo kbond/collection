@@ -24,9 +24,7 @@ use Zenstruck\Collection;
 final class ArrayCollection implements Collection, \ArrayAccess
 {
     /** @use IterableCollection<K,V> */
-    use IterableCollection {
-        eager as private;
-    }
+    use IterableCollection;
 
     /** @var array<K,V> */
     private array $source;
@@ -112,6 +110,11 @@ final class ArrayCollection implements Collection, \ArrayAccess
     public static function fill(int $start, int $count, mixed $value): self
     {
         return new self(\array_fill($start, $count, $value));
+    }
+
+    public function first(mixed $default = null): mixed
+    {
+        return $this->source[\array_key_first($this->source)] ?? $default;
     }
 
     /**
@@ -419,6 +422,11 @@ final class ArrayCollection implements Collection, \ArrayAccess
     public function implode(string $separator = ''): string
     {
         return \implode($separator, $this->source);
+    }
+
+    public function eager(): ArrayCollection
+    {
+        return $this;
     }
 
     public function getIterator(): \Traversable
