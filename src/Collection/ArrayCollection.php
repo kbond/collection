@@ -181,7 +181,7 @@ final class ArrayCollection implements Collection, \ArrayAccess
      */
     public function filter(?callable $predicate = null): self
     {
-        return new self(\array_filter($this->source, $predicate, \ARRAY_FILTER_USE_BOTH));
+        return new self(\array_filter($this->source, $predicate, \ARRAY_FILTER_USE_BOTH)); // @phpstan-ignore-line
     }
 
     /**
@@ -303,7 +303,7 @@ final class ArrayCollection implements Collection, \ArrayAccess
      */
     public function combine(iterable $values): self
     {
-        return new self(\array_combine($this->source, self::for($values)->source));
+        return new self(\array_combine($this->source, self::for($values)->source)); // @phpstan-ignore-line
     }
 
     /**

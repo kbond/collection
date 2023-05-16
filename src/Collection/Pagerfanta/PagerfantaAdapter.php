@@ -36,7 +36,7 @@ final class PagerfantaAdapter implements AdapterInterface
 
     public function getNbResults(): int
     {
-        return $this->collection->count();
+        return $this->collection->count(); // @phpstan-ignore-line
     }
 
     public function getSlice($offset, $length): iterable

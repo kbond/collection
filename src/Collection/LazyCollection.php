@@ -40,7 +40,7 @@ final class LazyCollection implements Collection
         $source ??= [];
 
         if (\is_callable($source) && (!\is_iterable($source) || \is_array($source))) {
-            $source = $source instanceof \Closure ? $source : \Closure::fromCallable($source);
+            $source = $source instanceof \Closure ? $source : \Closure::fromCallable($source); // @phpstan-ignore-line
         }
 
         $this->source = $source;
@@ -94,11 +94,9 @@ final class LazyCollection implements Collection
 
     public function count(): int
     {
-        if (\is_countable($source = &$this->normalizeSource())) {
-            return \count($source);
-        }
+        $source = &$this->normalizeSource();
 
-        return \iterator_count($source);
+        return \is_countable($source) ? \count($source) : \iterator_count($source);
     }
 
     /**
