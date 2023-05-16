@@ -102,17 +102,6 @@ trait CollectionTests
     /**
      * @test
      */
-    public function reject(): void
-    {
-        $items = $this->createWithItems(3);
-        $arr = \iterator_to_array($items);
-
-        $this->assertEquals([0 => $arr[0]], \iterator_to_array($items->reject(fn($value, $key) => $key > 0)));
-    }
-
-    /**
-     * @test
-     */
     public function key_by(): void
     {
         $items = $this->createWithItems(3);

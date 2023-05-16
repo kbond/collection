@@ -71,18 +71,6 @@ trait IterableCollection
     }
 
     /**
-     * Opposite of {@see filter()}.
-     *
-     * @param callable(V,K):bool $predicate
-     *
-     * @return LazyCollection<K,V>
-     */
-    public function reject(callable $predicate): LazyCollection
-    {
-        return $this->filter(fn($value, $key) => !$predicate($value, $key));
-    }
-
-    /**
      * @return LazyCollection<array-key,V>
      */
     public function keyBy(callable $function): LazyCollection

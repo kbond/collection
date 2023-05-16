@@ -35,16 +35,6 @@ final class ArrayCollectionTest extends TestCase
     /**
      * @test
      */
-    public function reject_no_callable(): void
-    {
-        $this->assertSame([], Arr::for([])->reject()->all());
-        $this->assertSame(['foo' => false, 'bar' => null, 'baz' => 0], Arr::for(['foo' => false, 'bar' => null, 'baz' => 0])->reject()->all());
-        $this->assertSame([], Arr::for(['foo' => true, 'bar' => new \stdClass(), 'baz' => 1])->reject()->all());
-    }
-
-    /**
-     * @test
-     */
     public function sum_no_callable(): void
     {
         $this->assertSame(0, Arr::for([])->sum());

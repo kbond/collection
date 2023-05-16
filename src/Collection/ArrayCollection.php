@@ -185,20 +185,6 @@ final class ArrayCollection implements Collection, \ArrayAccess
         return new self(\array_filter($this->source, $predicate, \ARRAY_FILTER_USE_BOTH));
     }
 
-    /**
-     * Opposite of {@see filter()}.
-     *
-     * @param null|callable(V,K):bool $predicate
-     *
-     * @return self<K,V>
-     */
-    public function reject(?callable $predicate = null): self
-    {
-        $predicate ??= static fn($value, $key) => (bool) $value;
-
-        return $this->filter(fn($value, $key) => !$predicate($value, $key));
-    }
-
     public function sum(?callable $selector = null): int|float
     {
         return $selector ? $this->traitSum($selector) : \array_sum($this->source);
