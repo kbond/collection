@@ -142,11 +142,11 @@ trait IterableCollection
     }
 
     /**
-     * @return PageCollection<V>
+     * @return Pages<V>
      */
-    public function pages(int $limit = Page::DEFAULT_LIMIT): PageCollection
+    public function pages(int $limit = Page::DEFAULT_LIMIT): Pages
     {
-        return new PageCollection($this, $limit);
+        return new Pages($this, $limit);
     }
 
     public function first(mixed $default = null): mixed

@@ -19,7 +19,7 @@ use Zenstruck\Collection;
  * @template V
  * @implements \IteratorAggregate<int,Page<V>>
  */
-final class PageCollection implements \IteratorAggregate, \Countable
+final class Pages implements \IteratorAggregate, \Countable
 {
     /** @var Collection<int,V> */
     private Collection $collection;

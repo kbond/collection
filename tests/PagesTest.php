@@ -13,19 +13,19 @@ namespace Zenstruck\Collection\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Zenstruck\Collection\LazyCollection;
-use Zenstruck\Collection\PageCollection;
+use Zenstruck\Collection\Pages;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-final class PageCollectionTest extends TestCase
+final class PagesTest extends TestCase
 {
     /**
      * @test
      */
     public function can_count_and_iterate_empty_collection(): void
     {
-        $collection = new PageCollection(new LazyCollection());
+        $collection = new Pages(new LazyCollection());
 
         $this->assertEmpty($collection);
         $this->assertEmpty(\iterator_to_array($collection));
@@ -36,7 +36,7 @@ final class PageCollectionTest extends TestCase
      */
     public function can_count_and_iterate_single_page_collection(): void
     {
-        $collection = new PageCollection(new LazyCollection(\range(1, 6)));
+        $collection = new Pages(new LazyCollection(\range(1, 6)));
         $pages = \iterator_to_array($collection);
 
         $this->assertCount(1, $collection);
@@ -50,7 +50,7 @@ final class PageCollectionTest extends TestCase
      */
     public function can_count_and_iterate_multi_page_collection(): void
     {
-        $collection = new PageCollection(new LazyCollection(\range(1, 71)));
+        $collection = new Pages(new LazyCollection(\range(1, 71)));
         $pages = \iterator_to_array($collection);
 
         $this->assertCount(4, $collection);
@@ -70,7 +70,7 @@ final class PageCollectionTest extends TestCase
      */
     public function can_always_get_page(): void
     {
-        $collection = new PageCollection(new LazyCollection());
+        $collection = new Pages(new LazyCollection());
 
         $this->assertSame([], \iterator_to_array($collection->get(1)));
         $this->assertSame([], \iterator_to_array($collection->get(99)));
