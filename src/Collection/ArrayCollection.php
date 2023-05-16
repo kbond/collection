@@ -26,7 +26,6 @@ final class ArrayCollection implements Collection, \ArrayAccess
     /** @use IterableCollection<K,V> */
     use IterableCollection {
         eager as private;
-        sum as private traitSum;
     }
 
     /** @var array<K,V> */
@@ -183,11 +182,6 @@ final class ArrayCollection implements Collection, \ArrayAccess
     public function filter(?callable $predicate = null): self
     {
         return new self(\array_filter($this->source, $predicate, \ARRAY_FILTER_USE_BOTH));
-    }
-
-    public function sum(?callable $selector = null): int|float
-    {
-        return $selector ? $this->traitSum($selector) : \array_sum($this->source);
     }
 
     /**

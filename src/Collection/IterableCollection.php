@@ -155,11 +155,6 @@ trait IterableCollection
         return $result;
     }
 
-    public function sum(callable $selector): int|float
-    {
-        return $this->reduce(fn($result, $value, $key) => $result + $selector($value, $key), 0);
-    }
-
     public function isEmpty(): bool
     {
         return 0 === $this->count();

@@ -68,9 +68,4 @@ interface Collection extends \IteratorAggregate, \Countable
      * @return T
      */
     public function reduce(callable $function, mixed $initial = null): mixed;
-
-    /**
-     * @param callable(V,K):numeric $selector
-     */
-    public function sum(callable $selector): int|float;
 }
