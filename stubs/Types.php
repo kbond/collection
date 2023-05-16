@@ -2,18 +2,10 @@
 
 use Zenstruck\Collection\Doctrine\DBAL\Repository;
 use Zenstruck\Collection\LazyCollection;
-use Zenstruck\Collection\DoctrineCollection;
+
 use function PHPStan\Testing\assertType;
 
 assertType('Zenstruck\Collection\LazyCollection<int, User>', new LazyCollection([new User]));
-
-/** @var DoctrineCollection<int,User> $doctrineCollection */
-
-assertType('Traversable<int, User>', $doctrineCollection->getIterator());
-assertType('Zenstruck\Collection\Page<User>', $doctrineCollection->paginate());
-assertType('User|null', $doctrineCollection->get(1));
-assertType('Zenstruck\Collection\DoctrineCollection<int, User>', $doctrineCollection->take(1));
-assertType('Zenstruck\Collection\DoctrineCollection<int, User>', $doctrineCollection->filter(fn(User $user) => true));
 
 /** @var ORMRepository<User> $ormRepository */
 
