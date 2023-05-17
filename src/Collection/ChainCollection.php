@@ -16,7 +16,7 @@ use Zenstruck\Collection;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  *
- * @template K of array-key
+ * @template K
  * @template V
  * @implements Collection<K,V>
  */
@@ -25,7 +25,7 @@ final class ChainCollection implements Collection
     /** @use IterableCollection<K,V> */
     use IterableCollection;
 
-    /** @var Collection<K,V> */
+    /** @var Collection<int,Collection<K,V>> */
     private Collection $collections;
 
     /**
@@ -50,13 +50,13 @@ final class ChainCollection implements Collection
             }
 
             foreach ($collection as $item) {
-                yield $item;
+                yield $item; // @phpstan-ignore-line
             }
         }
     }
 
     public function count(): int
     {
-        return (int) $this->collections->sum(fn(Collection $c) => $c->count());
+        return $this->collections->reduce(fn(int $r, Collection $c) => $r + $c->count(), 0);
     }
 }

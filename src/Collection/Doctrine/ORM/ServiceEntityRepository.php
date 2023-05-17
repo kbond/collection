@@ -39,6 +39,6 @@ class ServiceEntityRepository extends EntityRepository implements ServiceEntityR
             throw new \LogicException(\sprintf('Could not find the entity manager for class "%s". Check your Doctrine configuration to make sure it is configured to load this entity’s metadata.', $class));
         }
 
-        parent::__construct($manager, $manager->getClassMetadata($class));
+        parent::__construct($manager, $manager->getClassMetadata($class)); // @phpstan-ignore-line
     }
 }

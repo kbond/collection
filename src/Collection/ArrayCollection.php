@@ -24,10 +24,7 @@ use Zenstruck\Collection;
 final class ArrayCollection implements Collection, \ArrayAccess
 {
     /** @use IterableCollection<K,V> */
-    use IterableCollection {
-        eager as private;
-        sum as private traitSum;
-    }
+    use IterableCollection;
 
     /** @var array<K,V> */
     private array $source;
@@ -115,6 +112,11 @@ final class ArrayCollection implements Collection, \ArrayAccess
         return new self(\array_fill($start, $count, $value));
     }
 
+    public function first(mixed $default = null): mixed
+    {
+        return $this->source[\array_key_first($this->source)] ?? $default;
+    }
+
     /**
      * @return self<K,V>
      */
@@ -182,26 +184,7 @@ final class ArrayCollection implements Collection, \ArrayAccess
      */
     public function filter(?callable $predicate = null): self
     {
-        return new self(\array_filter($this->source, $predicate, \ARRAY_FILTER_USE_BOTH));
-    }
-
-    /**
-     * Opposite of {@see filter()}.
-     *
-     * @param null|callable(V,K):bool $predicate
-     *
-     * @return self<K,V>
-     */
-    public function reject(?callable $predicate = null): self
-    {
-        $predicate ??= static fn($value, $key) => (bool) $value;
-
-        return $this->filter(fn($value, $key) => !$predicate($value, $key));
-    }
-
-    public function sum(?callable $selector = null): int|float
-    {
-        return $selector ? $this->traitSum($selector) : \array_sum($this->source);
+        return new self(\array_filter($this->source, $predicate, \ARRAY_FILTER_USE_BOTH)); // @phpstan-ignore-line
     }
 
     /**
@@ -236,29 +219,6 @@ final class ArrayCollection implements Collection, \ArrayAccess
         $keys = \array_keys($this->source);
 
         return new self(\array_combine($keys, \array_map($function, $this->source, $keys)));
-    }
-
-    /**
-     * @template T of array-key|\Stringable
-     * @template U
-     *
-     * @param callable(V,K):iterable<T,U> $function
-     *
-     * @return self<array-key,U>
-     */
-    public function mapWithKeys(callable $function): self
-    {
-        $results = [];
-
-        foreach ($this->source as $key => $value) {
-            foreach ($function($value, $key) as $newKey => $newValue) {
-                $results[$newKey instanceof \Stringable ? (string) $newKey : $newKey] = $newValue;
-
-                continue 2;
-            }
-        }
-
-        return new self($results);
     }
 
     /**
@@ -346,7 +306,7 @@ final class ArrayCollection implements Collection, \ArrayAccess
      */
     public function combine(iterable $values): self
     {
-        return new self(\array_combine($this->source, self::for($values)->source));
+        return new self(\array_combine($this->source, self::for($values)->source)); // @phpstan-ignore-line
     }
 
     /**
@@ -462,6 +422,11 @@ final class ArrayCollection implements Collection, \ArrayAccess
     public function implode(string $separator = ''): string
     {
         return \implode($separator, $this->source);
+    }
+
+    public function eager(): self
+    {
+        return $this;
     }
 
     public function getIterator(): \Traversable

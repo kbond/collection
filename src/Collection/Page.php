@@ -16,23 +16,24 @@ use Zenstruck\Collection;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  *
+ * @template K
  * @template V
- * @implements \IteratorAggregate<int,V>
+ * @implements \IteratorAggregate<K,V>
  */
 final class Page implements \IteratorAggregate, \Countable
 {
     public const DEFAULT_LIMIT = 20;
 
-    /** @var Collection<int,V> */
+    /** @var Collection<K,V> */
     private Collection $collection;
     private int $page;
     private int $limit;
 
-    /** @var Collection<int,V>|null */
-    private ?Collection $cachedPage = null;
+    /** @var Collection<K,V> */
+    private Collection $cachedPage;
 
     /**
-     * @param Collection<int,V> $collection
+     * @param Collection<K,V> $collection
      */
     public function __construct(Collection $collection, int $page = 1, int $limit = self::DEFAULT_LIMIT)
     {
@@ -124,11 +125,11 @@ final class Page implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @return Collection<int,V>
+     * @return Collection<K,V>
      */
     private function getPage(): Collection
     {
-        if ($this->cachedPage) {
+        if (isset($this->cachedPage)) {
             return $this->cachedPage;
         }
 

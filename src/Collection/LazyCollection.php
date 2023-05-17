@@ -17,7 +17,7 @@ use Zenstruck\Collection;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  *
- * @template K of array-key
+ * @template K
  * @template V
  * @implements Collection<K,V>
  */
@@ -75,18 +75,6 @@ final class LazyCollection implements Collection
         return $this->traitTake($limit, $offset);
     }
 
-    /**
-     * @return array<K,V>
-     */
-    public function toArray(): array
-    {
-        if (\is_array($source = &$this->normalizeSource())) {
-            return $source;
-        }
-
-        return \iterator_to_array($source);
-    }
-
     public function getIterator(): \Traversable
     {
         $source = &$this->normalizeSource();
@@ -106,11 +94,9 @@ final class LazyCollection implements Collection
 
     public function count(): int
     {
-        if (\is_countable($source = &$this->normalizeSource())) {
-            return \count($source);
-        }
+        $source = &$this->normalizeSource();
 
-        return \iterator_count($source);
+        return \is_countable($source) ? \count($source) : \iterator_count($source);
     }
 
     /**

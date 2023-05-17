@@ -40,7 +40,7 @@ assertType('Zenstruck\Collection\Doctrine\ORM\Result<Zenstruck\Collection\Doctri
 assertType('array<int, Zenstruck\Collection\Doctrine\ORM\EntityWithAggregates<User>>', $ormRepository->filter([])->withAggregates()->toArray());
 assertType('Zenstruck\Collection\Doctrine\ORM\EntityWithAggregates<User>|null', $ormRepository->filter([])->withAggregates()->first());
 assertType('Traversable<int, User>', $ormRepository->filter([])->getIterator());
-assertType('Zenstruck\Collection\Page<User>', $ormRepository->filter([])->paginate());
+assertType('Zenstruck\Collection\Page<int, User>', $ormRepository->filter([])->paginate());
 assertType('User', $ormRepository->get([]));
 
 assertType('ORMRepository<User>', $ormRepository->flush());

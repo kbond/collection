@@ -17,7 +17,7 @@ namespace Zenstruck\Collection;
  *
  * @author Kevin Bond <kevinbond@gmail.com>
  *
- * @template K of array-key
+ * @template K
  * @template V
  */
 trait IterableCollection
@@ -71,27 +71,13 @@ trait IterableCollection
     }
 
     /**
-     * Opposite of {@see filter()}.
-     *
-     * @param callable(V,K):bool $predicate
-     *
      * @return LazyCollection<K,V>
-     */
-    public function reject(callable $predicate): LazyCollection
-    {
-        return $this->filter(fn($value, $key) => !$predicate($value, $key));
-    }
-
-    /**
-     * @return LazyCollection<array-key,V>
      */
     public function keyBy(callable $function): LazyCollection
     {
         return new LazyCollection(function() use ($function) {
             foreach ($this as $key => $value) {
-                $key = $function($value, $key);
-
-                yield $key instanceof \Stringable ? (string) $key : $key => $value;
+                yield $function($value, $key) => $value;
             }
         });
     }
@@ -113,28 +99,7 @@ trait IterableCollection
     }
 
     /**
-     * @template T of array-key|\Stringable
-     * @template U
-     *
-     * @param callable(V,K):iterable<T,U> $function
-     *
-     * @return LazyCollection<array-key,U>
-     */
-    public function mapWithKeys(callable $function): LazyCollection
-    {
-        return new LazyCollection(function() use ($function) {
-            foreach ($this as $key => $value) {
-                foreach ($function($value, $key) as $newKey => $newValue) {
-                    yield $newKey instanceof \Stringable ? (string) $newKey : $newKey => $newValue;
-
-                    continue 2;
-                }
-            }
-        });
-    }
-
-    /**
-     * @return Page<V>
+     * @return Page<K,V>
      */
     public function paginate(int $page = 1, int $limit = Page::DEFAULT_LIMIT): Page
     {
@@ -142,7 +107,7 @@ trait IterableCollection
     }
 
     /**
-     * @return Pages<V>
+     * @return Pages<K,V>
      */
     public function pages(int $limit = Page::DEFAULT_LIMIT): Pages
     {
@@ -158,14 +123,6 @@ trait IterableCollection
         return $default;
     }
 
-    /**
-     * @template D
-     *
-     * @param callable(V,K):bool $predicate
-     * @param D                  $default
-     *
-     * @return V|D
-     */
     public function firstWhere(callable $predicate, mixed $default = null): mixed
     {
         foreach ($this as $key => $value) {
@@ -186,11 +143,6 @@ trait IterableCollection
         }
 
         return $result;
-    }
-
-    public function sum(callable $selector): int|float
-    {
-        return $this->reduce(fn($result, $value, $key) => $result + $selector($value, $key), 0);
     }
 
     public function isEmpty(): bool
@@ -220,9 +172,6 @@ trait IterableCollection
         exit;
     }
 
-    /**
-     * @return ArrayCollection<K,V>
-     */
     public function eager(): ArrayCollection
     {
         return new ArrayCollection($this->iterableSource());

@@ -35,26 +35,6 @@ final class ArrayCollectionTest extends TestCase
     /**
      * @test
      */
-    public function reject_no_callable(): void
-    {
-        $this->assertSame([], Arr::for([])->reject()->all());
-        $this->assertSame(['foo' => false, 'bar' => null, 'baz' => 0], Arr::for(['foo' => false, 'bar' => null, 'baz' => 0])->reject()->all());
-        $this->assertSame([], Arr::for(['foo' => true, 'bar' => new \stdClass(), 'baz' => 1])->reject()->all());
-    }
-
-    /**
-     * @test
-     */
-    public function sum_no_callable(): void
-    {
-        $this->assertSame(0, Arr::for([])->sum());
-        $this->assertSame(6, Arr::for([1, 2, 3])->sum());
-        $this->assertSame(15.5, Arr::for([1.1, 2.1, 3.1, 4.1, 5.1])->sum());
-    }
-
-    /**
-     * @test
-     */
     public function all(): void
     {
         $this->assertSame(
@@ -64,6 +44,18 @@ final class ArrayCollectionTest extends TestCase
             ],
             $this->createWithItems(2)->all()
         );
+    }
+
+    /**
+     * @test
+     */
+    public function key_by_stringable_key(): void
+    {
+        $items = $this->createWithItems(3);
+
+        $this->assertSame(['k0', 'k1', 'k2'], \array_keys(\iterator_to_array($items->keyBy(
+            fn($value, $key) => new Stringable('k'.$key)
+        ))));
     }
 
     /**

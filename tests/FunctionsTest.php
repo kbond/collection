@@ -25,6 +25,6 @@ final class FunctionsTest extends TestCase
      */
     public function collect(): void
     {
-        $this->assertSame(['foo'], collect(['foo'])->toArray());
+        $this->assertSame(['foo'], collect(['foo'])->eager()->all());
     }
 }

@@ -11,10 +11,14 @@
 
 namespace Zenstruck;
 
+use Zenstruck\Collection\ArrayCollection;
+use Zenstruck\Collection\Page;
+use Zenstruck\Collection\Pages;
+
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  *
- * @template K of array-key
+ * @template K
  * @template V
  * @extends \IteratorAggregate<K,V>
  */
@@ -37,21 +41,11 @@ interface Collection extends \IteratorAggregate, \Countable
     public function map(callable $function): self;
 
     /**
-     * @template T of array-key|\Stringable
-     * @template U
-     *
-     * @param callable(V,K):iterable<T,U> $function
-     *
-     * @return self<array-key,U>
-     */
-    public function mapWithKeys(callable $function): self;
-
-    /**
-     * @template T of array-key|\Stringable
+     * @template T
      *
      * @param callable(V,K):T $function
      *
-     * @return self<array-key,V>
+     * @return self<T,V>
      */
     public function keyBy(callable $function): self;
 
@@ -70,6 +64,16 @@ interface Collection extends \IteratorAggregate, \Countable
     public function first(mixed $default = null): mixed;
 
     /**
+     * @template D
+     *
+     * @param callable(V,K):bool $predicate
+     * @param D                  $default
+     *
+     * @return V|D
+     */
+    public function firstWhere(callable $predicate, mixed $default = null): mixed;
+
+    /**
      * @template T
      *
      * @param callable(T,V,K):T $function
@@ -79,8 +83,20 @@ interface Collection extends \IteratorAggregate, \Countable
      */
     public function reduce(callable $function, mixed $initial = null): mixed;
 
+    public function isEmpty(): bool;
+
     /**
-     * @param callable(V,K):numeric $selector
+     * @return ArrayCollection<K&array-key,V>
      */
-    public function sum(callable $selector): int|float;
+    public function eager(): ArrayCollection;
+
+    /**
+     * @return Page<K,V>
+     */
+    public function paginate(int $page = 1, int $limit = Page::DEFAULT_LIMIT): Page;
+
+    /**
+     * @return Pages<K,V>
+     */
+    public function pages(int $limit = Page::DEFAULT_LIMIT): Pages;
 }

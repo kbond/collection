@@ -21,19 +21,5 @@ abstract class LazyCollectionTest extends TestCase
 {
     use CollectionTests;
 
-    /**
-     * @test
-     */
-    public function can_convert_to_array(): void
-    {
-        $this->assertEquals(
-            [
-                0 => $this->expectedValueAt(1),
-                1 => $this->expectedValueAt(2),
-            ],
-            $this->createWithItems(2)->toArray()
-        );
-    }
-
     abstract protected function createWithItems(int $count): LazyCollection;
 }

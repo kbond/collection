@@ -12,7 +12,6 @@
 namespace Zenstruck\Collection\Tests;
 
 use Zenstruck\Collection;
-use Zenstruck\Collection\Tests\Fixture\Stringable;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
@@ -102,17 +101,6 @@ trait CollectionTests
     /**
      * @test
      */
-    public function reject(): void
-    {
-        $items = $this->createWithItems(3);
-        $arr = \iterator_to_array($items);
-
-        $this->assertEquals([0 => $arr[0]], \iterator_to_array($items->reject(fn($value, $key) => $key > 0)));
-    }
-
-    /**
-     * @test
-     */
     public function key_by(): void
     {
         $items = $this->createWithItems(3);
@@ -123,49 +111,11 @@ trait CollectionTests
     /**
      * @test
      */
-    public function key_by_stringable_key(): void
-    {
-        $items = $this->createWithItems(3);
-
-        $this->assertSame(['k0', 'k1', 'k2'], \array_keys(\iterator_to_array($items->keyBy(
-            fn($value, $key) => new Stringable('k'.$key)
-        ))));
-    }
-
-    /**
-     * @test
-     */
     public function map(): void
     {
         $items = $this->createWithItems(3);
 
         $this->assertSame(['v0', 'v1', 'v2'], \iterator_to_array($items->map(fn($value, $key) => 'v'.$key)));
-    }
-
-    /**
-     * @test
-     */
-    public function map_with_keys(): void
-    {
-        $items = $this->createWithItems(3);
-
-        $this->assertSame(
-            ['k0' => 'v0', 'k1' => 'v1', 'k2' => 'v2'],
-            \iterator_to_array($items->mapWithKeys(fn($value, $key) => yield 'k'.$key => 'v'.$key))
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function map_with_keys_stringable_key(): void
-    {
-        $items = $this->createWithItems(3);
-
-        $this->assertSame(
-            ['k0' => 'v0', 'k1' => 'v1', 'k2' => 'v2'],
-            \iterator_to_array($items->mapWithKeys(fn($value, $key) => yield new Stringable('k'.$key) => 'v'.$key))
-        );
     }
 
     /**
@@ -227,16 +177,6 @@ trait CollectionTests
         $this->assertNull($this->createWithItems(0)->reduce($function));
         $this->assertSame(10, $this->createWithItems(5)->reduce($function));
         $this->assertSame(15, $this->createWithItems(5)->reduce($function, 5));
-    }
-
-    /**
-     * @test
-     */
-    public function sum(): void
-    {
-        $this->assertSame(0, $this->createWithItems(0)->sum(fn() => 10));
-        $this->assertSame(10, $this->createWithItems(5)->sum(fn($value, $key) => $key));
-        $this->assertSame(10.5, $this->createWithItems(5)->sum(fn($value, $key) => $key + 0.1));
     }
 
     abstract protected function createWithItems(int $count): Collection;
