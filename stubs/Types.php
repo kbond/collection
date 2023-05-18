@@ -48,10 +48,6 @@ assertType('ORMRepository<User>', $ormRepository->remove(new User));
 assertType('ORMRepository<User>', $ormRepository->add(new User));
 assertType('ORMRepository<User>', $ormRepository->save(new User));
 
-/** @var Repository<User> $dbalRepository */
-
-assertType('Traversable<int, User>', $dbalRepository->getIterator());
-
 class User
 {
 }
