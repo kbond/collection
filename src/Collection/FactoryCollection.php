@@ -25,12 +25,15 @@ final class FactoryCollection implements Collection
     /** @use IterableCollection<K,V> */
     use IterableCollection;
 
-    /** @var Collection<K,V> */
+    /** @var Collection<K,mixed> */
     private Collection $inner;
     private \Closure $factory;
 
     /**
-     * @param Collection<K,V> $collection
+     * @template T
+     *
+     * @param Collection<K,T> $collection
+     * @param callable(T):V   $factory
      */
     public function __construct(Collection $collection, callable $factory)
     {
