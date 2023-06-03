@@ -20,8 +20,9 @@ use Zenstruck\Collection\LazyCollection;
  * @param null|iterable<K,V>|callable():iterable<K,V> $source
  *
  * @return LazyCollection<K,V>
+ * @phpstan-return ($source is null ? LazyCollection<never,never> : LazyCollection<K,V>)
  */
 function collect(iterable|callable|null $source = null): LazyCollection
 {
-    return new LazyCollection($source);
+    return new LazyCollection($source ?? []);
 }

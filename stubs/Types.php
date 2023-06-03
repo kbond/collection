@@ -4,6 +4,7 @@ use Zenstruck\Collection\Doctrine\DBAL\Repository;
 use Zenstruck\Collection\LazyCollection;
 
 use function PHPStan\Testing\assertType;
+use function Zenstruck\collect;
 
 assertType('Zenstruck\Collection\LazyCollection<int, User>', new LazyCollection([new User]));
 
@@ -51,3 +52,19 @@ assertType('ORMRepository<User>', $ormRepository->save(new User));
 class User
 {
 }
+
+assertType('Zenstruck\Collection\LazyCollection<*NEVER*, *NEVER*>', collect());
+assertType('Zenstruck\Collection\LazyCollection<*NEVER*, *NEVER*>', collect(null));
+
+/**
+ * @param User[]|null $users
+ * @return LazyCollection<int, User>
+ */
+function get_users(array|null $users): LazyCollection
+{
+    return collect($users);
+}
+
+assertType('Zenstruck\Collection\LazyCollection<int, User>', get_users(null));
+assertType('Zenstruck\Collection\LazyCollection<int, User>', get_users([]));
+assertType('Zenstruck\Collection\LazyCollection<int, User>', get_users([new User()]));
