@@ -33,12 +33,10 @@ final class LazyCollection implements Collection
     private \Closure|iterable $source;
 
     /**
-     * @param null|iterable<K,V>|callable():iterable<K,V> $source
+     * @param iterable<K,V>|callable():iterable<K,V> $source
      */
-    public function __construct(iterable|callable|null $source = null)
+    public function __construct(iterable|callable $source = [])
     {
-        $source ??= [];
-
         if (\is_callable($source) && (!\is_iterable($source) || \is_array($source))) {
             $source = $source instanceof \Closure ? $source : \Closure::fromCallable($source);
         }
