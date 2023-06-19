@@ -24,10 +24,9 @@ final class Page implements \IteratorAggregate, \Countable
 {
     public const DEFAULT_LIMIT = 20;
 
-    /** @var Collection<K,V> */
-    private Collection $collection;
     private int $page;
     private int $limit;
+    private bool $strict = false;
 
     /** @var Collection<K,V> */
     private Collection $cachedPage;
@@ -35,15 +34,37 @@ final class Page implements \IteratorAggregate, \Countable
     /**
      * @param Collection<K,V> $collection
      */
-    public function __construct(Collection $collection, int $page = 1, int $limit = self::DEFAULT_LIMIT)
+    public function __construct(private Collection $collection, int $page = 1, int $limit = self::DEFAULT_LIMIT)
     {
-        $this->collection = $collection;
         $this->page = \max($page, 1);
         $this->limit = $limit < 1 ? self::DEFAULT_LIMIT : $limit;
     }
 
+    /**
+     * Enable/Disable "strict mode".
+     *
+     * When enabled, when calling {@see currentPage}, if provided page number
+     * greater than the calculated last page number, the last page number will
+     * be returned.
+     *
+     * When enabled, extra work (ie count query) may be required to ensure the
+     * current page number is valid.
+     *
+     * @return $this
+     */
+    public function strict(bool $flag = true): self
+    {
+        $this->strict = $flag;
+
+        return $this;
+    }
+
     public function currentPage(): int
     {
+        if (!$this->strict) {
+            return $this->page;
+        }
+
         $lastPage = $this->lastPage();
 
         if ($this->page > $lastPage) {

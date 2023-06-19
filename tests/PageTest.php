@@ -115,9 +115,9 @@ final class PageTest extends TestCase
     /**
      * @test
      */
-    public function it_properly_handles_a_too_large_page_as_the_last_page(): void
+    public function it_properly_handles_a_too_large_page_as_the_last_page_in_strict_mode(): void
     {
-        $pager = $this->createPage(\range(1, 504), 30, 20);
+        $pager = $this->createPage(\range(1, 504), 30, 20)->strict();
 
         $this->assertSame(26, $pager->currentPage());
         $this->assertSame(1, $pager->firstPage());
@@ -125,6 +125,21 @@ final class PageTest extends TestCase
         $this->assertSame(25, $pager->previousPage());
         $this->assertCount(4, $pager);
         $this->assertSame(\range(501, 504), \array_values(\iterator_to_array($pager)));
+    }
+
+    /**
+     * @test
+     */
+    public function when_not_in_strict_mode_can_get_any_page(): void
+    {
+        $pager = $this->createPage(\range(1, 504), 30, 20);
+
+        $this->assertSame(30, $pager->currentPage());
+        $this->assertSame(1, $pager->firstPage());
+        $this->assertSame(31, $pager->nextPage());
+        $this->assertSame(29, $pager->previousPage());
+        $this->assertCount(0, $pager);
+        $this->assertSame([], \array_values(\iterator_to_array($pager)));
     }
 
     /**

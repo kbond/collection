@@ -46,9 +46,7 @@ final class Pages implements \IteratorAggregate, \Countable
             return;
         }
 
-        yield $this->page1();
-
-        for ($page = 2; $page <= $this->count(); ++$page) {
+        for ($page = 1; $page <= $this->count(); ++$page) {
             yield $this->get($page);
         }
     }
