@@ -283,14 +283,14 @@ final class ArrayCollectionTest extends TestCase
     /**
      * @test
      */
-    public function key_exists(): void
+    public function has(): void
     {
         $items = Arr::for([0 => 1, 'foo' => 'bar', 'baz' => null]);
 
-        $this->assertTrue($items->keyExists(0));
-        $this->assertTrue($items->keyExists('foo'));
-        $this->assertTrue($items->keyExists('baz'));
-        $this->assertFalse($items->keyExists(1));
+        $this->assertTrue($items->has(0));
+        $this->assertTrue($items->has('foo'));
+        $this->assertTrue($items->has('baz'));
+        $this->assertFalse($items->has(1));
     }
 
     /**

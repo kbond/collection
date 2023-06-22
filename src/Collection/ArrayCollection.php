@@ -348,7 +348,7 @@ final class ArrayCollection implements Collection
      */
     public function get(int|string $key, mixed $default = null): mixed
     {
-        return $this->keyExists($key) ? $this->source[$key] : $default;
+        return $this->has($key) ? $this->source[$key] : $default;
     }
 
     /**
@@ -418,7 +418,7 @@ final class ArrayCollection implements Collection
     /**
      * @param K $key
      */
-    public function keyExists(string|int $key): bool
+    public function has(string|int $key): bool
     {
         return \array_key_exists($key, $this->source);
     }
