@@ -29,8 +29,8 @@ final class LazyCollection implements Collection
         first as private traitFirst;
     }
 
-    /** @var iterable<K,V>|\Closure():iterable<K,V> */
-    private \Closure|iterable $source;
+    /** @var \Traversable<K,V>|\Closure():iterable<K,V> */
+    private \Closure|\Traversable $source;
 
     /**
      * @param iterable<K,V>|callable():iterable<K,V> $source
@@ -41,12 +41,12 @@ final class LazyCollection implements Collection
             $source = $source instanceof \Closure ? $source : \Closure::fromCallable($source);
         }
 
-        $this->source = $source;
+        $this->source = \is_array($source) ? new \ArrayIterator($source) : $source;
     }
 
     public function first(mixed $default = null): mixed
     {
-        $source = &$this->normalizeSource();
+        $source = $this->normalizeSource();
 
         if ($source instanceof AbstractLazyCollection && !$source->isInitialized()) {
             return $source->slice(0, 1)[0] ?? $default;
@@ -60,10 +60,10 @@ final class LazyCollection implements Collection
      */
     public function take(int $limit, int $offset = 0): self
     {
-        $source = &$this->normalizeSource();
+        $source = $this->normalizeSource();
 
-        if (\is_array($source)) {
-            return new self(\array_slice($source, $offset, $limit, true));
+        if ($source instanceof \ArrayIterator || $source instanceof \ArrayObject) {
+            return new self(\array_slice($source->getArrayCopy(), $offset, $limit, true));
         }
 
         if ($source instanceof AbstractLazyCollection && !$source->isInitialized()) {
@@ -75,7 +75,7 @@ final class LazyCollection implements Collection
 
     public function getIterator(): \Traversable
     {
-        $source = &$this->normalizeSource();
+        $source = $this->normalizeSource();
 
         if ($source instanceof AbstractLazyCollection && !$source->isInitialized()) {
             foreach ($this->pages() as $page) {
@@ -92,7 +92,7 @@ final class LazyCollection implements Collection
 
     public function count(): int
     {
-        $source = &$this->normalizeSource();
+        $source = $this->normalizeSource();
 
         return \is_countable($source) ? \count($source) : \iterator_count($source);
     }
@@ -100,7 +100,7 @@ final class LazyCollection implements Collection
     /**
      * @return iterable<K,V>
      */
-    private function &normalizeSource(): iterable
+    private function normalizeSource(): iterable
     {
         if ($this->source instanceof \Generator) {
             throw new \InvalidArgumentException('$source must not be a generator directly as generators cannot be rewound. Try wrapping in a closure.');
@@ -122,9 +122,7 @@ final class LazyCollection implements Collection
             throw new \InvalidArgumentException('$source callback must return iterable.');
         }
 
-        $this->source = $source;
-
-        return $this->source;
+        return $this->source = \is_array($source) ? new \ArrayIterator($source) : $source;
     }
 
     /**
