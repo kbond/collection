@@ -16,12 +16,13 @@ use Zenstruck\Collection;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  *
+ * @immutable
+ *
  * @template K of array-key
  * @template V
  * @implements Collection<K,V>
- * @implements \ArrayAccess<K,V>
  */
-final class ArrayCollection implements Collection, \ArrayAccess
+final class ArrayCollection implements Collection
 {
     /** @use IterableCollection<K,V> */
     use IterableCollection;
@@ -358,49 +359,52 @@ final class ArrayCollection implements Collection, \ArrayAccess
      */
     public function set(int|string $key, mixed $value): self
     {
-        $this->source[$key] = $value;
+        $clone = clone $this;
+        $clone->source[$key] = $value;
 
-        return $this;
+        return $clone;
     }
 
     /**
      * @param K ...$keys
      *
-     * @return $this
+     * @return self<K,V>
      */
     public function unset(int|string ...$keys): self
     {
+        $clone = clone $this;
+
         foreach ($keys as $key) {
-            unset($this->source[$key]);
+            unset($clone->source[$key]);
         }
 
-        return $this;
+        return $clone;
     }
 
     /**
      * @param K ...$keys
      *
-     * @return $this
+     * @return self<K,V>
      */
     public function only(int|string ...$keys): self
     {
-        $this->source = \array_intersect_key($this->source, \array_flip($keys));
-
-        return $this;
+        return new self(\array_intersect_key($this->source, \array_flip($keys)));
     }
 
     /**
      * @param V ...$values
      *
-     * @return $this
+     * @return self<K,V>
      */
     public function push(mixed ...$values): self
     {
+        $clone = clone $this;
+
         foreach ($values as $value) {
-            $this->source[] = $value;
+            $clone->source[] = $value;
         }
 
-        return $this;
+        return $clone;
     }
 
     /**
@@ -416,7 +420,7 @@ final class ArrayCollection implements Collection, \ArrayAccess
      */
     public function keyExists(string|int $key): bool
     {
-        return isset($this->source[$key]) || \array_key_exists($key, $this->source);
+        return \array_key_exists($key, $this->source);
     }
 
     public function implode(string $separator = ''): string
@@ -437,31 +441,5 @@ final class ArrayCollection implements Collection, \ArrayAccess
     public function count(): int
     {
         return \count($this->source);
-    }
-
-    public function offsetExists(mixed $offset): bool
-    {
-        return $this->keyExists($offset);
-    }
-
-    public function offsetGet(mixed $offset): mixed
-    {
-        return $this->source[$offset];
-    }
-
-    public function offsetSet(mixed $offset, mixed $value): void
-    {
-        if (isset($offset)) {
-            $this->source[$offset] = $value;
-
-            return;
-        }
-
-        $this->source[] = $value;
-    }
-
-    public function offsetUnset(mixed $offset): void
-    {
-        unset($this->source[$offset]);
     }
 }

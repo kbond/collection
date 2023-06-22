@@ -303,23 +303,6 @@ final class ArrayCollectionTest extends TestCase
     /**
      * @test
      */
-    public function array_accessor(): void
-    {
-        $items = Arr::for([0 => 5]);
-
-        $items[0] = 10;
-        $items['foo'] = 'bar';
-        $items[] = 'baz';
-
-        $this->assertSame([0 => 10, 'foo' => 'bar', 1 => 'baz'], $items->all());
-        $this->assertSame('bar', $items['foo']);
-        $this->assertTrue(isset($items['foo']));
-        $this->assertFalse(isset($items['bar']));
-    }
-
-    /**
-     * @test
-     */
     public function explode_constructor(): void
     {
         $this->assertSame(['foo', 'bar', 'baz'], Arr::explode('.', 'foo.bar.baz')->all());
