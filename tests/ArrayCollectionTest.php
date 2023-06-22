@@ -270,13 +270,14 @@ final class ArrayCollectionTest extends TestCase
     /**
      * @test
      */
-    public function in(): void
+    public function contains(): void
     {
-        $items = Arr::for([0 => 1, 'foo' => 'bar']);
+        $items = Arr::for([0 => 1, 'foo' => 'bar', 'baz' => null]);
 
-        $this->assertTrue($items->in(1));
-        $this->assertTrue($items->in('bar'));
-        $this->assertFalse($items->in('foo'));
+        $this->assertTrue($items->contains(1));
+        $this->assertTrue($items->contains('bar'));
+        $this->assertFalse($items->contains('foo'));
+        $this->assertTrue($items->contains(null));
     }
 
     /**

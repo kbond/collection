@@ -410,7 +410,7 @@ final class ArrayCollection implements Collection
     /**
      * @param V $needle
      */
-    public function in(mixed $needle): bool
+    public function contains(mixed $needle): bool
     {
         return \in_array($needle, $this->source, true);
     }
