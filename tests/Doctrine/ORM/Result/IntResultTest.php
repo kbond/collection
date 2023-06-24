@@ -20,6 +20,17 @@ use Zenstruck\Collection\Tests\Doctrine\ORM\EntityResultTest;
  */
 final class IntResultTest extends EntityResultTest
 {
+    /**
+     * @test
+     */
+    public function can_select_single_scalar(): void
+    {
+        $this->persistEntities(3);
+        $result = (new EntityResult($this->em->createQueryBuilder()->select('SUM(e.id)')->from(Entity::class, 'e')))->asInt();
+
+        $this->assertSame(6, $result->first());
+    }
+
     protected function expectedValueAt(int $position)
     {
         return $position;

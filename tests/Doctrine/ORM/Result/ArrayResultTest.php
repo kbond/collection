@@ -20,6 +20,17 @@ use Zenstruck\Collection\Tests\Doctrine\ORM\EntityResultTest;
  */
 final class ArrayResultTest extends EntityResultTest
 {
+    /**
+     * @test
+     */
+    public function can_select_single(): void
+    {
+        $this->persistEntities(3);
+        $result = (new EntityResult($this->em->createQueryBuilder()->select('SUM(e.id), SUM(e.id)')->from(Entity::class, 'e')))->asArray();
+
+        $this->assertSame([6, 6], \array_values($result->first()));
+    }
+
     protected function expectedValueAt(int $position): array
     {
         return [
