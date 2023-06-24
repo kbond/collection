@@ -103,10 +103,7 @@ class EntityRepository implements ObjectRepository
      */
     final protected function qb(string $alias = 'e', ?string $indexBy = null): EntityResultQueryBuilder
     {
-        return (new EntityResultQueryBuilder($this->em))
-            ->select($alias)
-            ->from($this->class, $alias, $indexBy)
-        ;
+        return EntityResultQueryBuilder::forEntity($this->em, $this->class, $alias, $indexBy);
     }
 
     final protected function em(): EntityManagerInterface

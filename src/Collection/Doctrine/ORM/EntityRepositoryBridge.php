@@ -60,12 +60,17 @@ trait EntityRepositoryBridge
     /**
      * @return EntityResultQueryBuilder<V>
      */
+    public function createQueryBuilder($alias, $indexBy = null): EntityResultQueryBuilder
+    {
+        return EntityResultQueryBuilder::forEntity($this->_em, $this->getClassName(), $alias, $indexBy);
+    }
+
+    /**
+     * @return EntityResultQueryBuilder<V>
+     */
     protected function qb(string $alias = 'e', ?string $indexBy = null): EntityResultQueryBuilder
     {
-        return (new EntityResultQueryBuilder($this->getEntityManager()))
-            ->select($alias)
-            ->from($this->getEntityName(), $alias, $indexBy)
-        ;
+        return $this->createQueryBuilder($alias, $indexBy);
     }
 
     /**

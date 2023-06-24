@@ -11,6 +11,7 @@
 
 namespace Zenstruck\Collection\Doctrine\ORM;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -20,6 +21,19 @@ use Doctrine\ORM\QueryBuilder;
  */
 final class EntityResultQueryBuilder extends QueryBuilder
 {
+    /**
+     * @param class-string<V> $class
+     *
+     * @return self<V>
+     */
+    public static function forEntity(EntityManagerInterface $em, string $class, string $alias, ?string $indexBy = null): self
+    {
+        return (new self($em))
+            ->select($alias)
+            ->from($class, $alias, $indexBy)
+        ;
+    }
+
     /**
      * @return EntityResult<V>
      */
