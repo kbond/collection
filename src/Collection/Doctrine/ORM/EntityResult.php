@@ -43,6 +43,7 @@ final class EntityResult implements Result
 
     /** @var Query::HYDRATE_*|null */
     private ?int $hydrationMode = null;
+    private bool $fetchJoins = true;
 
     private bool $readonly = false;
     private int $count;
@@ -171,6 +172,17 @@ final class EntityResult implements Result
         return $this->as(self::ENTITY_WITH_AGGREGATES); // @phpstan-ignore-line
     }
 
+    /**
+     * @return self<V>
+     */
+    public function disableFetchJoins(): self
+    {
+        $clone = clone $this;
+        $clone->fetchJoins = false;
+
+        return $clone;
+    }
+
     public function take(int $limit, int $offset = 0): Collection
     {
         return new FactoryCollection(
@@ -246,7 +258,7 @@ final class EntityResult implements Result
      */
     private function paginator(?Query $query = null): Paginator
     {
-        $paginator = new Paginator($query ?? $this->query());
+        $paginator = new Paginator($query ?? $this->query(), $this->fetchJoins);
 
         if ($this->hydrationMode) {
             $paginator->setUseOutputWalkers(false);
