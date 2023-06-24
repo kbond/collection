@@ -11,23 +11,17 @@
 
 namespace Zenstruck\Collection\Tests\Symfony\Fixture\Repository;
 
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Zenstruck\Collection\Doctrine\ObjectRepository;
-use Zenstruck\Collection\Doctrine\ORM\EntityRepositoryBridge;
+use Zenstruck\Collection\Doctrine\ORM\Bridge\ORMServiceEntityRepository;
 use Zenstruck\Collection\Tests\Symfony\Fixture\Entity\Post;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  *
- * @extends ServiceEntityRepository<Post>
- * @implements ObjectRepository<\Zenstruck\Collection\Tests\Symfony\Fixture\Entity\Post>
+ * @extends ORMServiceEntityRepository<Post>
  */
-final class PostRepository extends ServiceEntityRepository implements ObjectRepository
+final class PostRepository extends ORMServiceEntityRepository
 {
-    /** @use EntityRepositoryBridge<Post> */
-    use EntityRepositoryBridge;
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Post::class);
