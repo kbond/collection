@@ -124,6 +124,16 @@ class EntityRepositoryTest extends TestCase
     /**
      * @test
      */
+    public function can_filter_with_none(): void
+    {
+        $objects = $this->createWithItems(3)->filter(ObjectRepository::NONE);
+
+        $this->assertCount(3, $objects);
+    }
+
+    /**
+     * @test
+     */
     public function can_filter_with_criteria(): void
     {
         $objects = $this->createWithItems(3)->filter(Criteria::create()->where(Criteria::expr()->eq('id', 2)));

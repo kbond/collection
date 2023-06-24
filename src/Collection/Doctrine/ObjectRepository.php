@@ -22,14 +22,19 @@ use Doctrine\Common\Collections\Criteria;
 interface ObjectRepository extends \Countable, \IteratorAggregate
 {
     /**
-     * @param mixed|Criteria $specification
+     * Use with {@see self::filter()} to return all results.
+     */
+    public const NONE = [];
+
+    /**
+     * @param mixed|array|Criteria $specification
      *
      * @return ?V
      */
     public function find(mixed $specification): ?object;
 
     /**
-     * @param mixed|Criteria $specification
+     * @param mixed|array|Criteria $specification
      *
      * @return Result<V>
      */
