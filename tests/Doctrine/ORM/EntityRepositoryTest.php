@@ -115,7 +115,7 @@ class EntityRepositoryTest extends TestCase
      */
     public function can_filter_with_array(): void
     {
-        $objects = $this->createWithItems(3)->filter(['id' => 2]);
+        $objects = $this->createWithItems(3)->query(['id' => 2]);
 
         $this->assertCount(1, $objects);
         $this->assertSame('value 2', \iterator_to_array($objects)[0]->value);
@@ -126,7 +126,7 @@ class EntityRepositoryTest extends TestCase
      */
     public function can_filter_with_none(): void
     {
-        $objects = $this->createWithItems(3)->filter(ObjectRepository::NONE);
+        $objects = $this->createWithItems(3)->query(ObjectRepository::ALL);
 
         $this->assertCount(3, $objects);
     }
@@ -136,7 +136,7 @@ class EntityRepositoryTest extends TestCase
      */
     public function can_filter_with_criteria(): void
     {
-        $objects = $this->createWithItems(3)->filter(Criteria::create()->where(Criteria::expr()->eq('id', 2)));
+        $objects = $this->createWithItems(3)->query(Criteria::create()->where(Criteria::expr()->eq('id', 2)));
 
         $this->assertCount(1, $objects);
         $this->assertSame('value 2', \iterator_to_array($objects)[0]->value);
@@ -147,7 +147,7 @@ class EntityRepositoryTest extends TestCase
      */
     public function can_filter_with_callable(): void
     {
-        $objects = $this->createWithItems(3)->filter(function(QueryBuilder $qb, string $root) {
+        $objects = $this->createWithItems(3)->query(function(QueryBuilder $qb, string $root) {
             $qb->andWhere($root.'.id = :id')->setParameter('id', 2);
         });
 
@@ -162,9 +162,9 @@ class EntityRepositoryTest extends TestCase
     {
         $repo = $this->createWithItems(3);
 
-        $this->assertEmpty($repo->filter(['id' => 99]));
-        $this->assertEmpty($repo->filter(Criteria::create()->where(Criteria::expr()->eq('id', 99))));
-        $this->assertEmpty($repo->filter(function(QueryBuilder $qb, string $root) {
+        $this->assertEmpty($repo->query(['id' => 99]));
+        $this->assertEmpty($repo->query(Criteria::create()->where(Criteria::expr()->eq('id', 99))));
+        $this->assertEmpty($repo->query(function(QueryBuilder $qb, string $root) {
             $qb->andWhere($root.'.id = :id')->setParameter('id', 99);
         }));
     }

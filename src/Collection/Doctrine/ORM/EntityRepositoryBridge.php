@@ -42,9 +42,9 @@ trait EntityRepositoryBridge
      *
      * @return EntityResult<V>
      */
-    public function filter(mixed $specification): EntityResult
+    public function query(mixed $specification): EntityResult
     {
-        return $this->collectionRepo()->filter($specification);
+        return $this->collectionRepo()->query($specification);
     }
 
     public function getIterator(): \Traversable

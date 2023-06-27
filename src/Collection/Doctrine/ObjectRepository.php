@@ -22,9 +22,9 @@ use Doctrine\Common\Collections\Criteria;
 interface ObjectRepository extends \Countable, \IteratorAggregate
 {
     /**
-     * Use with {@see self::filter()} to return all results.
+     * Use with {@see self::query()} to return all results.
      */
-    public const NONE = [];
+    public const ALL = [];
 
     /**
      * @param mixed|array|Criteria $specification
@@ -38,5 +38,5 @@ interface ObjectRepository extends \Countable, \IteratorAggregate
      *
      * @return Result<V>
      */
-    public function filter(mixed $specification): Result;
+    public function query(mixed $specification): Result;
 }

@@ -63,7 +63,7 @@ class EntityRepository implements ObjectRepository
      *
      * @return EntityResult<V>
      */
-    public function filter(mixed $specification): EntityResult
+    public function query(mixed $specification): EntityResult
     {
         $qb = $this->qb();
 
