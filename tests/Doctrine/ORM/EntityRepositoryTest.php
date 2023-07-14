@@ -158,6 +158,29 @@ class EntityRepositoryTest extends TestCase
     /**
      * @test
      */
+    public function cannot_find_with_callable_strings(): void
+    {
+        $this->assertIsCallable('system');
+        $this->assertNull($this->repo()->find('system'));
+    }
+
+    /**
+     * @test
+     */
+    public function cannot_query_with_callable_strings(): void
+    {
+        $this->assertIsCallable('system');
+
+        $repo = $this->repo();
+
+        $this->expectException(\InvalidArgumentException::class);
+
+        $repo->query('system');
+    }
+
+    /**
+     * @test
+     */
     public function can_filter_for_no_results(): void
     {
         $repo = $this->createWithItems(3);
