@@ -9,15 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Zenstruck\Collection\Tests\Doctrine\ORM;
+namespace Zenstruck\Collection\Tests\Doctrine\ORM\Bridge;
 
+use Zenstruck\Collection\Doctrine\ORM\Bridge\ORMEntityRepository;
 use Zenstruck\Collection\Tests\Doctrine\Fixture\Entity;
-use Zenstruck\Collection\Tests\Doctrine\ORM\Fixture\EntityRepositoryWithBridge;
+use Zenstruck\Collection\Tests\Doctrine\ORM\EntityRepositoryTest;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-final class EntityRepositoryBridgeTest extends EntityRepositoryTest
+final class ORMEntityRepositoryTest extends EntityRepositoryTest
 {
     /**
      * @test
@@ -37,8 +38,8 @@ final class EntityRepositoryBridgeTest extends EntityRepositoryTest
         $this->assertSame([], $this->createWithItems(0)->findAll());
     }
 
-    protected function repo(): EntityRepositoryWithBridge
+    protected function repo(): ORMEntityRepository
     {
-        return new EntityRepositoryWithBridge($this->em, $this->em->getClassMetadata(Entity::class));
+        return new ORMEntityRepository($this->em, $this->em->getClassMetadata(Entity::class));
     }
 }
