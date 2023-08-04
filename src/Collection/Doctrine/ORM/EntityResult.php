@@ -76,7 +76,7 @@ final class EntityResult implements Result
     public function first(mixed $default = null): mixed
     {
         try {
-            return $this->normalizeResult($this->query()->setMaxResults(1)->getSingleResult());
+            return $this->normalizeResult($this->query()->setMaxResults(1)->getSingleResult()) ?? $default;
         } catch (NoResultException) {
             return $default;
         }
@@ -242,6 +242,10 @@ final class EntityResult implements Result
 
     private function normalizeResult(mixed $result): mixed
     {
+        if (null === $result) {
+            return $result;
+        }
+
         if ($this->resultModifier) {
             $result = ($this->resultModifier)($result);
         }

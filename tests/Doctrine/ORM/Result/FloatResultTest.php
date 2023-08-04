@@ -20,6 +20,18 @@ use Zenstruck\Collection\Tests\Doctrine\ORM\EntityResultTest;
  */
 final class FloatResultTest extends EntityResultTest
 {
+    /**
+     * @test
+     */
+    public function null_result(): void
+    {
+        $result = (new EntityResult($this->em->createQueryBuilder()->select('AVG(e.id)')->from(Entity::class, 'e')))->asFloat();
+
+        $this->assertSame(null, $result->first());
+        $this->assertSame(0.0, $result->first(0.0));
+        $this->assertSame([null], $result->eager()->all());
+    }
+
     protected function expectedValueAt(int $position)
     {
         return (float) $position;
