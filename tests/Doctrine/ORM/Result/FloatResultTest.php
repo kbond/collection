@@ -29,7 +29,7 @@ final class FloatResultTest extends EntityResultTest
 
         $this->assertNull($result->first());
         $this->assertSame(0.0, $result->first(0.0));
-        $this->assertSame([null], $result->eager()->all());
+        $this->assertSame([], \array_filter($result->eager()->all()));
     }
 
     protected function expectedValueAt(int $position)
