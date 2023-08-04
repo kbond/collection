@@ -27,7 +27,7 @@ final class FloatResultTest extends EntityResultTest
     {
         $result = (new EntityResult($this->em->createQueryBuilder()->select('AVG(e.id)')->from(Entity::class, 'e')))->asFloat();
 
-        $this->assertSame(null, $result->first());
+        $this->assertNull($result->first());
         $this->assertSame(0.0, $result->first(0.0));
         $this->assertSame([null], $result->eager()->all());
     }
