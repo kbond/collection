@@ -33,8 +33,8 @@ class User
 {
 }
 
-assertType('Zenstruck\Collection\LazyCollection<*NEVER*, *NEVER*>', collect());
-assertType('Zenstruck\Collection\LazyCollection<*NEVER*, *NEVER*>', collect(null));
+assertType('Zenstruck\Collection\LazyCollection<never, never>', collect());
+assertType('Zenstruck\Collection\LazyCollection<never, never>', collect(null));
 
 /**
  * @param User[]|null $users

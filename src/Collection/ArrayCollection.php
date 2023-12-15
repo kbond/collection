@@ -185,7 +185,7 @@ final class ArrayCollection implements Collection
      */
     public function filter(?callable $predicate = null): self
     {
-        return new self(\array_filter($this->source, $predicate, \ARRAY_FILTER_USE_BOTH)); // @phpstan-ignore-line
+        return new self(\array_filter($this->source, $predicate, \ARRAY_FILTER_USE_BOTH));
     }
 
     /**
