@@ -11,6 +11,8 @@
 
 namespace Zenstruck\Collection;
 
+use Zenstruck\Collection;
+
 /**
  * Convert any {@see \Traversable} class into a {@see Collection}
  * with some extra, "lazy" methods.
@@ -25,8 +27,14 @@ trait IterableCollection
     /**
      * @return LazyCollection<K,V>
      */
-    public function take(int $limit, int $offset = 0): LazyCollection
+    public function take(int $limit, int $offset = 0): Collection
     {
+        $source = $this->iterableSource();
+
+        if ($source instanceof \ArrayIterator || $source instanceof \ArrayObject) {
+            return new LazyCollection(\array_slice($source->getArrayCopy(), $offset, $limit, true));
+        }
+
         if ($limit < 0) {
             throw new \InvalidArgumentException('$limit cannot be negative');
         }
@@ -59,7 +67,7 @@ trait IterableCollection
     /**
      * @return LazyCollection<K,V>
      */
-    public function filter(callable $predicate): LazyCollection
+    public function filter(callable $predicate): Collection
     {
         return new LazyCollection(function() use ($predicate) {
             foreach ($this as $key => $value) {
@@ -73,7 +81,7 @@ trait IterableCollection
     /**
      * @return LazyCollection<K,V>
      */
-    public function keyBy(callable $function): LazyCollection
+    public function keyBy(callable $function): Collection
     {
         return new LazyCollection(function() use ($function) {
             foreach ($this as $key => $value) {
@@ -89,7 +97,7 @@ trait IterableCollection
      *
      * @return LazyCollection<K,T>
      */
-    public function map(callable $function): LazyCollection
+    public function map(callable $function): Collection
     {
         return new LazyCollection(function() use ($function) {
             foreach ($this as $key => $value) {
@@ -152,7 +160,16 @@ trait IterableCollection
 
     public function count(): int
     {
-        return \iterator_count($this);
+        $source = $this->iterableSource();
+
+        return \is_countable($source) ? \count($source) : \iterator_count($source);
+    }
+
+    public function getIterator(): \Traversable
+    {
+        foreach ($this->iterableSource() as $key => $value) {
+            yield $key => $value;
+        }
     }
 
     public function dump(): static
@@ -162,9 +179,6 @@ trait IterableCollection
         return $this;
     }
 
-    /**
-     * @return never
-     */
     public function dd(): void
     {
         $this->dump();
