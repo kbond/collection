@@ -21,6 +21,9 @@ use Zenstruck\Collection\Pages;
  * @template K
  * @template V
  * @extends \IteratorAggregate<K,V>
+ *
+ * @method static dump()
+ * @method never  dd()
  */
 interface Collection extends \IteratorAggregate, \Countable
 {

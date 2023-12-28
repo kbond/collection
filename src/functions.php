@@ -11,6 +11,8 @@
 
 namespace Zenstruck;
 
+use Doctrine\Common\Collections\Collection as DoctrineCollection;
+use Zenstruck\Collection\Doctrine\DoctrineBridgeCollection;
 use Zenstruck\Collection\LazyCollection;
 
 /**
@@ -20,9 +22,17 @@ use Zenstruck\Collection\LazyCollection;
  * @param null|iterable<K,V>|callable():iterable<K,V> $source
  *
  * @return LazyCollection<K,V>
- * @phpstan-return ($source is null ? LazyCollection<never,never> : LazyCollection<K,V>)
+ * @phpstan-return ($source is null ? Collection<never,never> : Collection<K,V>)
  */
-function collect(iterable|callable|null $source = null): LazyCollection
+function collect(iterable|callable|null $source = null): Collection
 {
+    if ($source instanceof Collection) {
+        return $source;
+    }
+
+    if ($source instanceof DoctrineCollection) {
+        return new DoctrineBridgeCollection($source);
+    }
+
     return new LazyCollection($source ?? []);
 }

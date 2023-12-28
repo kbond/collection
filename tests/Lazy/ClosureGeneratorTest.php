@@ -24,22 +24,10 @@ final class ClosureGeneratorTest extends LazyCollectionTest
      */
     public function cannot_create_with_generator_directly(): void
     {
-        $collection = new LazyCollection((static fn() => yield 'foo' => 'bar')());
-
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('$source must not be a generator directly as generators cannot be rewound. Try wrapping in a closure.');
 
-        $collection->count();
-    }
-
-    /**
-     * @test
-     */
-    public function can_create_with_generator_if_calling_eager_immediately(): void
-    {
-        $collection = new LazyCollection((static fn() => yield 'foo' => 'bar')());
-
-        $this->assertSame(['foo' => 'bar'], $collection->eager()->all());
+        new LazyCollection((static fn() => yield 'foo' => 'bar')());
     }
 
     /**

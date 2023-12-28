@@ -1,5 +1,6 @@
 <?php
 
+use Zenstruck\Collection;
 use Zenstruck\Collection\Doctrine\ObjectRepository;
 use Zenstruck\Collection\Doctrine\ORM\EntityRepository;
 use Zenstruck\Collection\LazyCollection;
@@ -33,18 +34,20 @@ class User
 {
 }
 
-assertType('Zenstruck\Collection\LazyCollection<never, never>', collect());
-assertType('Zenstruck\Collection\LazyCollection<never, never>', collect(null));
+assertType('Zenstruck\Collection<never, never>', collect());
+assertType('Zenstruck\Collection<never, never>', collect());
 
 /**
  * @param User[]|null $users
- * @return LazyCollection<int, User>
+ * @return Collection<int, User>
  */
-function get_users(array|null $users): LazyCollection
+function get_users(array|null $users): Collection
 {
     return collect($users);
 }
 
-assertType('Zenstruck\Collection\LazyCollection<int, User>', get_users(null));
-assertType('Zenstruck\Collection\LazyCollection<int, User>', get_users([]));
-assertType('Zenstruck\Collection\LazyCollection<int, User>', get_users([new User()]));
+assertType('Zenstruck\Collection<int, User>', get_users(null));
+assertType('Zenstruck\Collection<int, User>', get_users([]));
+assertType('Zenstruck\Collection<int, User>', get_users([new User()]));
+assertType('Zenstruck\Collection<int, User>', get_users([new User()])->dump());
+assertType('never', get_users([new User()])->dd());
