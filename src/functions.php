@@ -11,6 +11,8 @@
 
 namespace Zenstruck;
 
+use Doctrine\Common\Collections\Collection as DoctrineCollection;
+use Zenstruck\Collection\Doctrine\DoctrineBridgeCollection;
 use Zenstruck\Collection\LazyCollection;
 
 /**
@@ -24,5 +26,13 @@ use Zenstruck\Collection\LazyCollection;
  */
 function collect(iterable|callable|null $source = null): Collection
 {
+    if ($source instanceof Collection) {
+        return $source;
+    }
+
+    if ($source instanceof DoctrineCollection) {
+        return new DoctrineBridgeCollection($source);
+    }
+
     return new LazyCollection($source ?? []);
 }
