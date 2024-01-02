@@ -31,6 +31,7 @@ final class DoctrineBridgeCollection implements Collection, DoctrineCollection
     /** @use IterableCollection<K,V> */
     use IterableCollection {
         map as private innerMap;
+        reduce as private innerReduce;
     }
 
     /** @var DoctrineCollection<K,V> */
@@ -61,12 +62,26 @@ final class DoctrineBridgeCollection implements Collection, DoctrineCollection
         return $this->inner->first() ?? $default; // @phpstan-ignore-line
     }
 
+    public function findFirst(\Closure $p): mixed
+    {
+        if (\method_exists($this->inner, 'findFirst')) {
+            return $this->inner->findFirst($p);
+        }
+
+        throw new \LogicException(\sprintf('Method "%s::findFirst()" not available. Try upgrading to doctrine/collections 2.0+.', $this->inner::class));
+    }
+
     /**
      * @return self<K,V>
      */
     public function filter(\Closure|callable $p): self
     {
-        return new self($this->inner->filter(\Closure::fromCallable($p))); // @phpstan-ignore-line
+        return new self($this->inner->filter(\Closure::fromCallable($p)));
+    }
+
+    public function reduce(\Closure|callable $function, mixed $initial = null): mixed
+    {
+        return $this->innerReduce($function, $initial);
     }
 
     /**
@@ -95,9 +110,9 @@ final class DoctrineBridgeCollection implements Collection, DoctrineCollection
         return new ArrayCollection($this->inner->toArray());
     }
 
-    public function add($element): bool
+    public function add($element): void
     {
-        return $this->inner->add($element);
+        $this->inner->add($element);
     }
 
     public function clear(): void
