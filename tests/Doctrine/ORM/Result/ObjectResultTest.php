@@ -52,7 +52,7 @@ class ObjectResultTest extends EntityResultTest
 
         $values = \array_map(
             static fn(Entity $entity) => $entity->value,
-            $this->em->getRepository(Entity::class)->findAll()
+            $this->em->getRepository(Entity::class)->findAll(),
         );
 
         $this->assertSame(['new value 1', 'new value 2'], $values);

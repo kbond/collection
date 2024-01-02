@@ -32,7 +32,7 @@ final class ChainCollectionTest extends TestCase
                 new ArrayCollection(['foo' => 'foo value']),
                 new ArrayCollection(['bar' => 'bar value', 'foo' => 'foo value 2']),
             ],
-            preserveKeys: true
+            preserveKeys: true,
         );
 
         $this->assertSame(['foo' => 'foo value 2', 'bar' => 'bar value'], \iterator_to_array($collection));

@@ -51,7 +51,7 @@ final class AggregateEntityResultTest extends ObjectResultTest
 
         $values = \array_map(
             static fn(Entity $entity) => $entity->value,
-            $this->em->getRepository(Entity::class)->findAll()
+            $this->em->getRepository(Entity::class)->findAll(),
         );
 
         $this->assertSame(['new value 1', 'new value 2'], $values);
@@ -120,7 +120,7 @@ final class AggregateEntityResultTest extends ObjectResultTest
         $this->persistEntities(3);
 
         $result = new EntityResult($this->em->createQueryBuilder()->select('e')->from(Entity::class, 'e')
-            ->addSelect('UPPER(e.value) AS extra')
+            ->addSelect('UPPER(e.value) AS extra'),
         );
 
         $this->expectException(\LogicException::class);

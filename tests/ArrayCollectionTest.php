@@ -42,7 +42,7 @@ final class ArrayCollectionTest extends TestCase
                 0 => $this->expectedValueAt(1),
                 1 => $this->expectedValueAt(2),
             ],
-            $this->createWithItems(2)->all()
+            $this->createWithItems(2)->all(),
         );
     }
 
@@ -54,7 +54,7 @@ final class ArrayCollectionTest extends TestCase
         $items = $this->createWithItems(3);
 
         $this->assertSame(['k0', 'k1', 'k2'], \array_keys(\iterator_to_array($items->keyBy(
-            fn($value, $key) => new Stringable('k'.$key)
+            fn($value, $key) => new Stringable('k'.$key),
         ))));
     }
 
@@ -68,7 +68,7 @@ final class ArrayCollectionTest extends TestCase
                 0,
                 1,
             ],
-            $this->createWithItems(2)->keys()->all()
+            $this->createWithItems(2)->keys()->all(),
         );
     }
 
@@ -90,7 +90,7 @@ final class ArrayCollectionTest extends TestCase
                 1 => $this->expectedValueAt(2),
                 0 => $this->expectedValueAt(1),
             ],
-            $this->createWithItems(2)->reverse()->all()
+            $this->createWithItems(2)->reverse()->all(),
         );
     }
 
@@ -176,7 +176,7 @@ final class ArrayCollectionTest extends TestCase
                 'foo' => 1,
                 'bar' => 2,
             ],
-            Arr::for(['foo', 'bar'])->combine([1, 2])->all()
+            Arr::for(['foo', 'bar'])->combine([1, 2])->all(),
         );
     }
 
@@ -190,7 +190,7 @@ final class ArrayCollectionTest extends TestCase
                 'foo' => 'foo',
                 'bar' => 'bar',
             ],
-            Arr::for(['foo', 'bar'])->combineWithSelf()->all()
+            Arr::for(['foo', 'bar'])->combineWithSelf()->all(),
         );
     }
 
@@ -204,7 +204,7 @@ final class ArrayCollectionTest extends TestCase
                 $first = ['name' => 'kevin', 'country' => 'CA'],
                 $second = ['name' => 'ryan', 'country' => new Stringable('US')],
                 $third = ['name' => 'leanna', 'country' => 'US'],
-            ]
+            ],
         );
 
         $this->assertSame([

@@ -32,7 +32,7 @@ trait HasDatabase
     {
         $this->em = EntityManager::create(
             ['driver' => 'pdo_sqlite', 'memory' => true],
-            Setup::createAttributeMetadataConfiguration([], true)
+            Setup::createAttributeMetadataConfiguration([], true),
         );
 
         $schemaTool = new SchemaTool($this->em);

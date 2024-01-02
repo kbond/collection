@@ -163,7 +163,7 @@ trait CollectionTests
                 0 => $this->expectedValueAt(1),
                 1 => $this->expectedValueAt(2),
             ],
-            $this->createWithItems(2)->eager()->all()
+            $this->createWithItems(2)->eager()->all(),
         );
     }
 

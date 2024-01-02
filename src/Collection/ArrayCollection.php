@@ -174,7 +174,7 @@ final class ArrayCollection implements Collection
     public function merge(iterable ...$with): self
     {
         return new self(
-            \array_merge($this->source, ...\array_map(static fn(iterable $x) => self::for($x)->source, $with))
+            \array_merge($this->source, ...\array_map(static fn(iterable $x) => self::for($x)->source, $with)),
         );
     }
 
