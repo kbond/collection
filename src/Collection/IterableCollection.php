@@ -131,7 +131,7 @@ trait IterableCollection
         return $default;
     }
 
-    public function firstWhere(callable $predicate, mixed $default = null): mixed
+    public function find(callable $predicate, mixed $default = null): mixed
     {
         foreach ($this as $key => $value) {
             if ($predicate($value, $key)) {

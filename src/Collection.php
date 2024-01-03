@@ -74,7 +74,7 @@ interface Collection extends \IteratorAggregate, \Countable
      *
      * @return V|D
      */
-    public function firstWhere(callable $predicate, mixed $default = null): mixed;
+    public function find(callable $predicate, mixed $default = null): mixed;
 
     /**
      * @template T

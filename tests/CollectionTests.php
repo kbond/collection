@@ -134,14 +134,14 @@ trait CollectionTests
     /**
      * @test
      */
-    public function first_where(): void
+    public function find(): void
     {
         $items = $this->createWithItems(2);
 
-        $this->assertEquals(\iterator_to_array($items)[1], $items->firstWhere(fn($value, $key) => $key > 0));
-        $this->assertEquals(\iterator_to_array($items)[1], $items->firstWhere(fn($value, $key) => $key > 0), 'foo');
-        $this->assertNull($items->firstWhere(fn($value, $key) => $key > 10));
-        $this->assertEquals('foo', $items->firstWhere(fn($value, $key) => $key > 10, 'foo'));
+        $this->assertEquals(\iterator_to_array($items)[1], $items->find(fn($value, $key) => $key > 0));
+        $this->assertEquals(\iterator_to_array($items)[1], $items->find(fn($value, $key) => $key > 0), 'foo');
+        $this->assertNull($items->find(fn($value, $key) => $key > 10));
+        $this->assertEquals('foo', $items->find(fn($value, $key) => $key > 10, 'foo'));
     }
 
     /**
