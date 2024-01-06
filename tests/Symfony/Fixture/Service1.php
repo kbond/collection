@@ -11,7 +11,7 @@
 
 namespace Zenstruck\Collection\Tests\Symfony\Fixture;
 
-use Zenstruck\Collection\Doctrine\ObjectRepositoryFactory;
+use Zenstruck\Collection\Repository\ObjectRepositoryFactory;
 use Zenstruck\Collection\Tests\Symfony\Fixture\Repository\PostRepository;
 
 /**

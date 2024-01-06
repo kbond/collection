@@ -9,32 +9,27 @@
  * file that was distributed with this source code.
  */
 
-namespace Zenstruck\Collection\Doctrine;
+namespace Zenstruck\Collection\Repository;
 
 use Doctrine\Common\Collections\Criteria;
+use Zenstruck\Collection\Doctrine\Result;
+use Zenstruck\Collection\Repository;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  *
  * @template V of object
- * @extends \IteratorAggregate<int,V>
+ * @extends Repository<V>
  */
-interface ObjectRepository extends \Countable, \IteratorAggregate
+interface ObjectRepository extends Repository
 {
     /**
-     * Use with {@see self::query()} to return all results.
-     */
-    public const ALL = [];
-
-    /**
      * @param mixed|array|Criteria $specification
-     *
-     * @return ?V
      */
     public function find(mixed $specification): ?object;
 
     /**
-     * @param mixed|array|Criteria $specification
+     * @param mixed|null|array|Criteria $specification
      *
      * @return Result<V>
      */

@@ -38,7 +38,7 @@ trait EntityRepositoryBridge
     }
 
     /**
-     * @param Criteria|array<string,mixed>|(object&callable(QueryBuilder):void) $specification
+     * @param Criteria|null|array<string,mixed>|(object&callable(QueryBuilder):void) $specification
      *
      * @return EntityResult<V>
      */

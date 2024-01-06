@@ -15,8 +15,9 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\TestCase;
 use Zenstruck\Collection\Doctrine\Batch\CountableBatchIterator;
-use Zenstruck\Collection\Doctrine\ObjectRepository;
 use Zenstruck\Collection\Doctrine\ORM\EntityRepository;
+use Zenstruck\Collection\Exception\InvalidSpecification;
+use Zenstruck\Collection\Repository\ObjectRepository;
 use Zenstruck\Collection\Tests\CountableIteratorTests;
 use Zenstruck\Collection\Tests\Doctrine\Fixture\Entity;
 use Zenstruck\Collection\Tests\Doctrine\Fixture\Relation;
@@ -126,7 +127,7 @@ class EntityRepositoryTest extends TestCase
      */
     public function can_filter_with_none(): void
     {
-        $objects = $this->createWithItems(3)->query(ObjectRepository::ALL);
+        $objects = $this->createWithItems(3)->query(null);
 
         $this->assertCount(3, $objects);
     }
@@ -173,7 +174,8 @@ class EntityRepositoryTest extends TestCase
 
         $repo = $this->repo();
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(\sprintf('"%s::query()" does not support specification "system (string)". Only array|Criteria|callable(QueryBuilder) supported.', EntityRepository::class));
+        $this->expectException(InvalidSpecification::class);
 
         $repo->query('system');
     }

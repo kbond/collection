@@ -12,8 +12,8 @@
 namespace Zenstruck\Collection\Doctrine\ORM\Bridge;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Zenstruck\Collection\Doctrine\ObjectRepository;
 use Zenstruck\Collection\Doctrine\ORM\EntityRepositoryBridge;
+use Zenstruck\Collection\Repository\ObjectRepository;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>

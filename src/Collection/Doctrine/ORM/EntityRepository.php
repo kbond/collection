@@ -15,7 +15,8 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
-use Zenstruck\Collection\Doctrine\ObjectRepository;
+use Zenstruck\Collection\Exception\InvalidSpecification;
+use Zenstruck\Collection\Repository\ObjectRepository;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
@@ -59,12 +60,13 @@ class EntityRepository implements ObjectRepository
     }
 
     /**
-     * @param Criteria|array<string,mixed>|(object&callable(QueryBuilder):void) $specification
+     * @param Criteria|null|array<string,mixed>|(object&callable(QueryBuilder):void) $specification
      *
      * @return EntityResult<V>
      */
     public function query(mixed $specification): EntityResult
     {
+        $specification ??= [];
         $qb = $this->qb();
 
         if ($specification instanceof Criteria) {
@@ -78,7 +80,7 @@ class EntityRepository implements ObjectRepository
         }
 
         if (!\is_array($specification)) {
-            throw new \InvalidArgumentException(\sprintf('Unsupported specification type "%s" - only array|Criteria|callable(QueryBuilder) supported.', \get_debug_type($specification)));
+            throw InvalidSpecification::build($specification, static::class, __FUNCTION__, 'Only array|Criteria|callable(QueryBuilder) supported.');
         }
 
         foreach ($specification as $field => $value) {
