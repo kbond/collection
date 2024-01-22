@@ -14,8 +14,8 @@ namespace Zenstruck\Collection\Symfony\DependencyInjection;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Reference;
+use Zenstruck\Collection\Doctrine\ObjectRepositoryFactory;
 use Zenstruck\Collection\Doctrine\ORM\EntityRepositoryFactory;
-use Zenstruck\Collection\Repository\ObjectRepositoryFactory;
 use Zenstruck\Collection\Symfony\Doctrine\ChainObjectRepositoryFactory;
 
 /**

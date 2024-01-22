@@ -9,30 +9,34 @@
  * file that was distributed with this source code.
  */
 
-namespace Zenstruck\Collection;
+namespace Zenstruck\Collection\Doctrine;
 
-use Zenstruck\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Zenstruck\Collection\Exception\InvalidSpecification;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  *
- * @template V
+ * @template V of object
  * @extends \IteratorAggregate<int,V>
  */
-interface Repository extends \Countable, \IteratorAggregate
+interface ObjectRepository extends \Countable, \IteratorAggregate
 {
-    /**
-     * @return ?V
-     */
-    public function find(mixed $specification): mixed;
+    public const ALL = null;
 
     /**
-     * @param mixed|null $specification "null" returns the entire repository as a collection
+     * @param mixed|array|Criteria $specification
      *
-     * @return Collection<int,V>
+     * @return ?V
+     */
+    public function find(mixed $specification): ?object;
+
+    /**
+     * @param mixed|self::ALL|array|Criteria $specification
+     *
+     * @return Result<V>
      *
      * @throws InvalidSpecification if the specification is not supported
      */
-    public function query(mixed $specification): Collection;
+    public function query(mixed $specification): Result;
 }

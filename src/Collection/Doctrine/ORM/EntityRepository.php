@@ -15,8 +15,8 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
+use Zenstruck\Collection\Doctrine\ObjectRepository;
 use Zenstruck\Collection\Exception\InvalidSpecification;
-use Zenstruck\Collection\Repository\ObjectRepository;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>

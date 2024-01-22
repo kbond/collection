@@ -12,8 +12,8 @@
 namespace Zenstruck\Collection\Symfony\Doctrine;
 
 use Symfony\Contracts\Service\ResetInterface;
-use Zenstruck\Collection\Repository\ObjectRepository;
-use Zenstruck\Collection\Repository\ObjectRepositoryFactory;
+use Zenstruck\Collection\Doctrine\ObjectRepository;
+use Zenstruck\Collection\Doctrine\ObjectRepositoryFactory;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>

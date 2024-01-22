@@ -11,7 +11,7 @@
 
 namespace Zenstruck\Collection\Tests\Symfony\Fixture;
 
-use Zenstruck\Collection\Repository\ObjectRepository;
+use Zenstruck\Collection\Doctrine\ObjectRepository;
 use Zenstruck\Collection\Symfony\Doctrine\ForObject;
 use Zenstruck\Collection\Tests\Symfony\Fixture\Entity\Category;
 

@@ -1,7 +1,7 @@
 <?php
 
 use Zenstruck\Collection;
-use Zenstruck\Collection\Repository\ObjectRepository;
+use Zenstruck\Collection\Doctrine\ObjectRepository;
 use Zenstruck\Collection\Doctrine\ORM\EntityRepository;
 use Zenstruck\Collection\LazyCollection;
 

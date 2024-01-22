@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Zenstruck\Collection\Repository;
+namespace Zenstruck\Collection\Doctrine;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
