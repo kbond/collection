@@ -12,6 +12,7 @@
 namespace Zenstruck\Collection\Doctrine\ORM;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -21,6 +22,10 @@ use Doctrine\ORM\QueryBuilder;
  */
 final class EntityResultQueryBuilder extends QueryBuilder
 {
+    /** @var list<callable(Query):void> */
+    private array $queryModifiers = [];
+    private bool $readonly = false;
+
     /**
      * @param class-string<V> $class
      *
@@ -39,6 +44,57 @@ final class EntityResultQueryBuilder extends QueryBuilder
      */
     public function result(): EntityResult
     {
-        return new EntityResult($this);
+        $result = new EntityResult($this);
+
+        return $this->readonly ? $result->readonly() : $result;
+    }
+
+    public function getQuery(): Query
+    {
+        $query = parent::getQuery();
+
+        foreach ($this->queryModifiers as $modifier) {
+            $modifier($query);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Add a query modifier.
+     *
+     * @param callable(Query):void $modifier
+     *
+     * @return $this
+     */
+    public function modifyQuery(callable $modifier): self
+    {
+        $this->queryModifiers[] = $modifier;
+
+        return $this;
+    }
+
+    /**
+     * Mark the query and {@see EntityResult} as readonly.
+     *
+     * @return $this
+     */
+    public function readonly(): self
+    {
+        $this->readonly = true;
+
+        return $this->modifyQuery(function(Query $query) {
+            $query->setHint(Query::HINT_READ_ONLY, true);
+        });
+    }
+
+    /**
+     * @return $this
+     */
+    public function cacheResult(?int $lifetime = null, ?string $key = null): self
+    {
+        return $this->modifyQuery(function(Query $query) use ($lifetime, $key) {
+            $query->enableResultCache($lifetime, $key);
+        });
     }
 }
