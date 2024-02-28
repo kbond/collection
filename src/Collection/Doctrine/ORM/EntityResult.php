@@ -75,9 +75,20 @@ final class EntityResult implements Result
 
     public function first(mixed $default = null): mixed
     {
+        $query = $this->query();
+        $sql = $query->getSQL();
+
+        if (\is_array($sql)) {
+            $sql = \implode(' ', $sql);
+        }
+
+        if (\str_starts_with(\mb_strtolower($sql), 'delete')) {
+            return $this->normalizeResult($query->execute());
+        }
+
         try {
-            return $this->normalizeResult($this->query()->setMaxResults(1)->getSingleResult()) ?? $default;
-        } catch (NoResultException) {
+            return $this->normalizeResult($query->setMaxResults(1)->getSingleResult()) ?? $default;
+        } catch (NoResultException $e) {
             return $default;
         }
     }
@@ -211,12 +222,18 @@ final class EntityResult implements Result
             }
 
             throw $e;
+        } catch (\TypeError $e) {
+            throw new \LogicException('Result is not a collection.', previous: $e);
         }
     }
 
     public function eager(): ArrayCollection
     {
-        return new ArrayCollection(\array_map([$this, 'normalizeResult'], $this->query()->execute()));
+        if (!\is_array($result = $this->query()->execute())) {
+            throw new \LogicException('Result is not a collection.');
+        }
+
+        return new ArrayCollection(\array_map([$this, 'normalizeResult'], $result));
     }
 
     public function count(): int
