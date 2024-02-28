@@ -35,7 +35,7 @@ final class SingleScalarTest extends TestCase
             ->result()
         ;
 
-        $this->assertSame(10, $result->asScalar()->first());
+        $this->assertEquals(10, $result->asScalar()->first());
         $this->assertSame(10, $result->asInt()->first());
         $this->assertSame(10.0, $result->asFloat()->first());
         $this->assertSame('10', $result->asString()->first());
@@ -54,7 +54,7 @@ final class SingleScalarTest extends TestCase
             ->result()
         ;
 
-        $this->assertSame(3, $result->asScalar()->first());
+        $this->assertEquals(3, $result->asScalar()->first());
         $this->assertSame(0, $result->asInt()->first());
         $this->assertSame(0.0, $result->asFloat()->first());
         $this->assertSame('0', $result->asString()->first());
@@ -75,7 +75,7 @@ final class SingleScalarTest extends TestCase
             ->result()
         ;
 
-        $this->assertSame(3, $result->asScalar()->first());
+        $this->assertEquals(3, $result->asScalar()->first());
         $this->assertSame(3, $result->asInt()->first());
         $this->assertSame(3.0, $result->asFloat()->first());
         $this->assertSame('3', $result->asString()->first());
