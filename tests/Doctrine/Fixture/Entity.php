@@ -47,4 +47,9 @@ class Entity
 
         return $entity;
     }
+
+    public function getValue(): string
+    {
+        return $this->value;
+    }
 }

@@ -23,6 +23,46 @@ final class AggregateEntityResultTest extends ObjectResultTest
     /**
      * @test
      */
+    public function can_access_entity_data_and_aggregates_magically(): void
+    {
+        $result = $this->createWithItems(1)->first();
+
+        $this->assertTrue(isset($result->id));
+        $this->assertFalse(isset($result->invalid));
+        $this->assertSame('value 1', $result->value);
+        $this->assertSame('value 1', $result->getValue());
+        $this->assertTrue(isset($result->extra));
+        $this->assertSame('VALUE 1', $result->extra);
+        $this->assertSame('VALUE 1', $result->extra());
+    }
+
+    /**
+     * @test
+     */
+    public function get_invalid_property(): void
+    {
+        $result = $this->createWithItems(1)->first();
+
+        $this->expectException(\LogicException::class);
+
+        $result->invalid;
+    }
+
+    /**
+     * @test
+     */
+    public function call_invalid_method(): void
+    {
+        $result = $this->createWithItems(1)->first();
+
+        $this->expectException(\BadMethodCallException::class);
+
+        $result->invalid();
+    }
+
+    /**
+     * @test
+     */
     public function detaches_entity_from_em_on_batch_iterate(): void
     {
         /** @var EntityWithAggregates $result */

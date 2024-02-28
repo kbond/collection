@@ -29,6 +29,28 @@ final class EntityWithAggregates
     }
 
     /**
+     * @param mixed[] $arguments
+     */
+    public function __call(string $name, array $arguments): mixed
+    {
+        if (\method_exists($this->entity, $name)) {
+            return $this->entity->{$name}(...$arguments);
+        }
+
+        return $this->aggregates[$name] ?? throw new \BadMethodCallException(\sprintf('"%s" is not a existing %s method or aggregate.', $name, $this->entity::class));
+    }
+
+    public function __get(string $name): mixed
+    {
+        return $this->entity->{$name} ?? $this->aggregates[$name] ?? throw new \LogicException(\sprintf('"%s" is not a existing %s property or aggregate.', $name, $this->entity::class));
+    }
+
+    public function __isset(string $name): bool
+    {
+        return isset($this->entity->{$name}) || isset($this->aggregates[$name]);
+    }
+
+    /**
      * @internal
      *
      * @param array{0:V} $data
