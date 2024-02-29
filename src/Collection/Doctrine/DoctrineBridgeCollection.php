@@ -76,7 +76,7 @@ final class DoctrineBridgeCollection implements Collection, DoctrineCollection
      */
     public function filter(\Closure|callable $p): self
     {
-        return new self($this->inner->filter(\Closure::fromCallable($p)));
+        return new self($this->inner->filter($p(...)));
     }
 
     public function reduce(\Closure|callable $function, mixed $initial = null): mixed

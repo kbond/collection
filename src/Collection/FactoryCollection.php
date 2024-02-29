@@ -38,7 +38,7 @@ final class FactoryCollection implements Collection
     public function __construct(Collection $collection, callable $factory)
     {
         $this->inner = $collection;
-        $this->factory = \Closure::fromCallable($factory);
+        $this->factory = $factory(...);
     }
 
     public function getIterator(): \Traversable

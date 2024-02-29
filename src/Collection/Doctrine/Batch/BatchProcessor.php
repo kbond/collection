@@ -28,7 +28,7 @@ class BatchProcessor implements \IteratorAggregate
     /**
      * @param iterable<V> $items
      */
-    public function __construct(protected iterable $items, private ObjectManager $om, private int $chunkSize = 100)
+    public function __construct(protected readonly iterable $items, private ObjectManager $om, private int $chunkSize = 100)
     {
     }
 

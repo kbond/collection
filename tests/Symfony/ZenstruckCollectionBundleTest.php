@@ -11,7 +11,6 @@
 
 namespace Zenstruck\Collection\Tests\Symfony;
 
-use Composer\InstalledVersions;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Zenstruck\Collection\Tests\Symfony\Fixture\Entity\Category;
 use Zenstruck\Collection\Tests\Symfony\Fixture\Entity\Post;
@@ -51,10 +50,6 @@ final class ZenstruckCollectionBundleTest extends KernelTestCase
      */
     public function autowiring_for_object(): void
     {
-        if (\version_compare(InstalledVersions::getVersion('symfony/dependency-injection'), '6.3.0', '<')) {
-            $this->markTestSkipped('symfony/dependency-injection 6.3.0+ required.');
-        }
-
         create(Category::class, ['id' => 2]);
 
         /** @var Service1 $service1 */

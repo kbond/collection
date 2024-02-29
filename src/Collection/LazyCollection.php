@@ -38,7 +38,7 @@ final class LazyCollection implements Collection
         }
 
         if (\is_callable($source) && (!\is_iterable($source) || \is_array($source))) {
-            $source = $source instanceof \Closure ? $source : \Closure::fromCallable($source); // @phpstan-ignore-line
+            $source = $source(...); // @phpstan-ignore-line
         }
 
         $this->source = \is_array($source) ? new \ArrayIterator($source) : $source;

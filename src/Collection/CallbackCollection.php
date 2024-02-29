@@ -32,7 +32,7 @@ final class CallbackCollection implements Collection
     public function __construct(callable $iterator, callable $count)
     {
         $this->iterator = new LazyCollection($iterator);
-        $this->count = \Closure::fromCallable($count);
+        $this->count = $count(...);
     }
 
     public function getIterator(): \Traversable
