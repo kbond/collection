@@ -45,7 +45,7 @@ class EntityRepository implements ObjectRepository
                 return $this->qb()->addCriteria($specification)->getQuery()->getSingleResult();
             }
 
-            if (\is_array($specification) && !array_is_list($specification)) {
+            if (\is_array($specification) && !\array_is_list($specification)) {
                 return $this->em()->getUnitOfWork()->getEntityPersister($this->class)->load($specification, limit: 1); // @phpstan-ignore-line
             }
 
