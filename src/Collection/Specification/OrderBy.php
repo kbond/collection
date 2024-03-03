@@ -16,13 +16,20 @@ namespace Zenstruck\Collection\Specification;
  */
 final class OrderBy extends Field
 {
-    private string $direction;
+    public const ASC = 'ASC';
+    public const DESC = 'DESC';
+
+    /** @var self::* */
+    public readonly string $direction;
 
     private function __construct(string $field, string $direction)
     {
         parent::__construct($field);
 
-        $this->direction = \mb_strtoupper($direction);
+        $this->direction = match (\mb_strtoupper($direction)) {
+            self::DESC => self::DESC,
+            default => self::ASC,
+        };
     }
 
     public static function asc(string $field): self
@@ -33,10 +40,5 @@ final class OrderBy extends Field
     public static function desc(string $field): self
     {
         return new self($field, 'DESC');
-    }
-
-    public function direction(): string
-    {
-        return $this->direction;
     }
 }

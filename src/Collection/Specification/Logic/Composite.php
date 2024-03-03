@@ -19,7 +19,7 @@ use Zenstruck\Collection\Specification\Util;
 abstract class Composite implements \Stringable
 {
     /** @var mixed[] */
-    private array $children;
+    public readonly array $children;
 
     public function __construct(mixed ...$children)
     {
@@ -28,16 +28,8 @@ abstract class Composite implements \Stringable
 
     final public function __toString(): string
     {
-        $children = \array_filter(\array_map([Util::class, 'stringify'], $this->children()));
+        $children = \array_filter(\array_map([Util::class, 'stringify'], $this->children));
 
         return \sprintf('%s(%s)', (new \ReflectionClass($this))->getShortName(), \implode(', ', $children));
-    }
-
-    /**
-     * @return mixed[]
-     */
-    final public function children(): array
-    {
-        return $this->children;
     }
 }

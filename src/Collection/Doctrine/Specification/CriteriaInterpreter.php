@@ -74,7 +74,7 @@ final class CriteriaInterpreter
         }
 
         if ($specification instanceof OrderBy) {
-            $this->orderBy[$specification->field()] = $specification->direction();
+            $this->orderBy[$specification->field] = $specification->direction;
 
             return null;
         }
@@ -84,18 +84,18 @@ final class CriteriaInterpreter
             OrX::class => $this->composite($specification, 'orX'),
             Not::class => $this->composite($specification, 'not'),
 
-            Contains::class => Criteria::expr()->contains($specification->field(), $specification->value()),
-            EndsWith::class => Criteria::expr()->endsWith($specification->field(), $specification->value()),
-            EqualTo::class => Criteria::expr()->eq($specification->field(), $specification->value()),
-            GreaterThan::class => Criteria::expr()->gt($specification->field(), $specification->value()),
-            GreaterThanOrEqualTo::class => Criteria::expr()->gte($specification->field(), $specification->value()),
-            In::class => Criteria::expr()->in($specification->field(), $specification->value()),
-            IsNull::class => Criteria::expr()->isNull($specification->field()),
-            LessThan::class => Criteria::expr()->lt($specification->field(), $specification->value()),
-            LessThanOrEqualTo::class => Criteria::expr()->lte($specification->field(), $specification->value()),
-            StartsWith::class => Criteria::expr()->startsWith($specification->field(), $specification->value()),
+            Contains::class => Criteria::expr()->contains($specification->field, $specification->value),
+            EndsWith::class => Criteria::expr()->endsWith($specification->field, $specification->value),
+            EqualTo::class => Criteria::expr()->eq($specification->field, $specification->value),
+            GreaterThan::class => Criteria::expr()->gt($specification->field, $specification->value),
+            GreaterThanOrEqualTo::class => Criteria::expr()->gte($specification->field, $specification->value),
+            In::class => Criteria::expr()->in($specification->field, $specification->value),
+            IsNull::class => Criteria::expr()->isNull($specification->field),
+            LessThan::class => Criteria::expr()->lt($specification->field, $specification->value),
+            LessThanOrEqualTo::class => Criteria::expr()->lte($specification->field, $specification->value),
+            StartsWith::class => Criteria::expr()->startsWith($specification->field, $specification->value),
 
-            Callback::class => $specification->value()($this->criteria),
+            Callback::class => ($specification->value)($this->criteria),
 
             default => throw InvalidSpecification::build($specification, $this->class, $this->method),
         };
@@ -119,7 +119,7 @@ final class CriteriaInterpreter
             \array_filter(
                 \array_map(
                     fn(object $child) => $this->transform($child),
-                    $specification->children(),
+                    $specification->children,
                 ),
                 static fn(mixed $child) => $child instanceof Expression,
             ),

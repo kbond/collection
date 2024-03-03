@@ -37,7 +37,7 @@ final class Join extends Field
 
     public function __toString(): string
     {
-        return \sprintf('%sJoin(%s)', \ucfirst($this->type()), $this->field());
+        return \sprintf('%sJoin(%s)', \ucfirst($this->type()), $this->field);
     }
 
     public static function inner(string $field, ?string $alias = null): self

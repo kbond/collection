@@ -13,27 +13,13 @@ namespace Zenstruck\Collection\Specification;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
- *
- * @template C
  */
 final class Callback
 {
-    /** @var callable(C):mixed */
-    private $value;
+    public readonly \Closure $value;
 
-    /**
-     * @param callable(C):mixed $value
-     */
     public function __construct(callable $value)
     {
-        $this->value = $value;
-    }
-
-    /**
-     * @return callable(C):mixed
-     */
-    public function value(): callable
-    {
-        return $this->value;
+        $this->value = $value(...);
     }
 }

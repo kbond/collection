@@ -16,17 +16,12 @@ namespace Zenstruck\Collection\Specification;
  */
 abstract class Field implements \Stringable
 {
-    public function __construct(private string $field)
+    public function __construct(public readonly string $field)
     {
     }
 
     public function __toString(): string
     {
-        return \sprintf('%s(%s)', (new \ReflectionClass($this))->getShortName(), $this->field());
-    }
-
-    final public function field(): string
-    {
-        return $this->field;
+        return \sprintf('%s(%s)', (new \ReflectionClass($this))->getShortName(), $this->field);
     }
 }

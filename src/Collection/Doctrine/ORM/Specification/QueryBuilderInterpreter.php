@@ -91,26 +91,26 @@ final class QueryBuilderInterpreter
             OrX::class => $this->composite($specification, 'orX'),
             Not::class => $this->composite($specification, 'not'),
 
-            EqualTo::class => $this->qb->expr()->eq($this->prefix($specification->field()), $this->param($specification->value())),
-            LessThan::class => $this->qb->expr()->lt($this->prefix($specification->field()), $this->param($specification->value())),
-            LessThanOrEqualTo::class => $this->qb->expr()->lte($this->prefix($specification->field()), $this->param($specification->value())),
-            GreaterThan::class => $this->qb->expr()->gt($this->prefix($specification->field()), $this->param($specification->value())),
-            GreaterThanOrEqualTo::class => $this->qb->expr()->gte($this->prefix($specification->field()), $this->param($specification->value())),
-            In::class => $this->qb->expr()->in($this->prefix($specification->field()), $this->param($specification->value())),
-            IsNull::class => $this->qb->expr()->isNull($this->prefix($specification->field())),
-            Contains::class => $this->qb->expr()->like($this->prefix($specification->field()), $this->param('%'.self::normalizeLike($specification).'%')),
-            StartsWith::class => $this->qb->expr()->like($this->prefix($specification->field()), $this->param(self::normalizeLike($specification).'%')),
-            EndsWith::class => $this->qb->expr()->like($this->prefix($specification->field()), $this->param('%'.self::normalizeLike($specification))),
+            EqualTo::class => $this->qb->expr()->eq($this->prefix($specification->field), $this->param($specification->value)),
+            LessThan::class => $this->qb->expr()->lt($this->prefix($specification->field), $this->param($specification->value)),
+            LessThanOrEqualTo::class => $this->qb->expr()->lte($this->prefix($specification->field), $this->param($specification->value)),
+            GreaterThan::class => $this->qb->expr()->gt($this->prefix($specification->field), $this->param($specification->value)),
+            GreaterThanOrEqualTo::class => $this->qb->expr()->gte($this->prefix($specification->field), $this->param($specification->value)),
+            In::class => $this->qb->expr()->in($this->prefix($specification->field), $this->param($specification->value)),
+            IsNull::class => $this->qb->expr()->isNull($this->prefix($specification->field)),
+            Contains::class => $this->qb->expr()->like($this->prefix($specification->field), $this->param('%'.self::normalizeLike($specification).'%')),
+            StartsWith::class => $this->qb->expr()->like($this->prefix($specification->field), $this->param(self::normalizeLike($specification).'%')),
+            EndsWith::class => $this->qb->expr()->like($this->prefix($specification->field), $this->param('%'.self::normalizeLike($specification))),
 
-            Callback::class => $specification->value()($this->qb, $this->alias), // @phpstan-ignore-line
+            Callback::class => ($specification->value)($this->qb, $this->alias),
 
-            OrderBy::class => $this->qb->addOrderBy($this->prefix($specification->field()), $specification->direction()),
+            OrderBy::class => $this->qb->addOrderBy($this->prefix($specification->field), $specification->direction),
 
             Instance::class => $this->qb->expr()->isInstanceOf($this->alias, $this->param($specification->of())),
             Delete::class => $this->qb->delete(),
             Unwritable::class => $this->qb->readonly(),
             Cache::class => $this->qb->cacheResult($specification->lifetime(), $specification->key()),
-            AntiJoin::class => $this->qb->leftJoin($this->prefix($specification->field()), $specification->field())->andWhere($this->qb->expr()->isNull($specification->field())),
+            AntiJoin::class => $this->qb->leftJoin($this->prefix($specification->field), $specification->field)->andWhere($this->qb->expr()->isNull($specification->field)),
             Join::class => $this->interpretJoin($specification),
 
             default => throw InvalidSpecification::build($specification, $this->callingClass, $this->callingMethod),
@@ -137,7 +137,7 @@ final class QueryBuilderInterpreter
 
     private function addJoinToQueryBuilder(Join $join): void
     {
-        $field = $this->prefix($join->field());
+        $field = $this->prefix($join->field);
 
         foreach ($this->qb->getDQLParts()['join'] as $entry) {
             foreach ($entry as $item) {
@@ -169,7 +169,7 @@ final class QueryBuilderInterpreter
             \array_filter(
                 \array_map(
                     fn(object $child) => $this->transform($child),
-                    $specification->children(),
+                    $specification->children,
                 ),
                 static fn(mixed $child) => self::isExpression($child),
             ),
@@ -178,7 +178,7 @@ final class QueryBuilderInterpreter
 
     private static function normalizeLike(Comparison $comparison): string
     {
-        return \str_replace(['%', '*'], ['%%', '%'], \trim($comparison->value(), '*')); // todo make wildcard char configurable?
+        return \str_replace(['%', '*'], ['%%', '%'], \trim($comparison->value, '*')); // todo make wildcard char configurable?
     }
 
     private function param(mixed $value): string

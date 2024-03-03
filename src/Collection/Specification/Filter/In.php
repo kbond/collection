@@ -16,7 +16,7 @@ use Zenstruck\Collection\Specification\Comparison;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  *
- * @method mixed[] value()
+ * @property mixed[] $value
  */
 final class In extends Comparison
 {

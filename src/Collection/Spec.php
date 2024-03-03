@@ -104,13 +104,6 @@ class Spec
         return new GreaterThanOrEqualTo($field, $value);
     }
 
-    /**
-     * @template C
-     *
-     * @param callable(C):mixed $value
-     *
-     * @return Callback<C>
-     */
     final public static function callback(callable $value): Callback
     {
         return new Callback($value);

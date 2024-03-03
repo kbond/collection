@@ -16,7 +16,7 @@ namespace Zenstruck\Collection\Specification;
  */
 abstract class Comparison extends Field
 {
-    public function __construct(string $field, private mixed $value)
+    public function __construct(string $field, public readonly mixed $value)
     {
         parent::__construct($field);
     }
@@ -30,7 +30,7 @@ abstract class Comparison extends Field
         }
 
         return \sprintf('Compare(%s %s %s)',
-            $this->field(),
+            $this->field,
             (new \ReflectionClass($this))->getShortName(),
             \is_scalar($value) ? $value : \get_debug_type($value),
         );
