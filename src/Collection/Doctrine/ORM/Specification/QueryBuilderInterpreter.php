@@ -22,6 +22,7 @@ use Zenstruck\Collection\Doctrine\Specification\Unwritable;
 use Zenstruck\Collection\Exception\InvalidSpecification;
 use Zenstruck\Collection\Specification\Callback;
 use Zenstruck\Collection\Specification\Comparison;
+use Zenstruck\Collection\Specification\Filter\Between;
 use Zenstruck\Collection\Specification\Filter\Contains;
 use Zenstruck\Collection\Specification\Filter\EndsWith;
 use Zenstruck\Collection\Specification\Filter\EqualTo;
@@ -101,6 +102,7 @@ final class QueryBuilderInterpreter
             Contains::class => $this->qb->expr()->like($this->prefix($specification->field), $this->param('%'.self::normalizeLike($specification).'%')),
             StartsWith::class => $this->qb->expr()->like($this->prefix($specification->field), $this->param(self::normalizeLike($specification).'%')),
             EndsWith::class => $this->qb->expr()->like($this->prefix($specification->field), $this->param('%'.self::normalizeLike($specification))),
+            Between::class => $this->interpretBetween($specification),
 
             Callback::class => ($specification->value)($this->qb, $this->alias),
 
@@ -115,6 +117,19 @@ final class QueryBuilderInterpreter
 
             default => throw InvalidSpecification::build($specification, $this->callingClass, $this->callingMethod),
         };
+    }
+
+    private function interpretBetween(Between $between): mixed
+    {
+        if (Between::INCLUSIVE === $between->type) {
+            return $this->qb->expr()->between(
+                $this->prefix($between->field),
+                $this->param($between->begin),
+                $this->param($between->end),
+            );
+        }
+
+        return $this->transform($between->asAnd());
     }
 
     private function interpretJoin(Join $join): mixed

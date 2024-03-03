@@ -15,6 +15,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Expr\Expression;
 use Zenstruck\Collection\Exception\InvalidSpecification;
 use Zenstruck\Collection\Specification\Callback;
+use Zenstruck\Collection\Specification\Filter\Between;
 use Zenstruck\Collection\Specification\Filter\Contains;
 use Zenstruck\Collection\Specification\Filter\EndsWith;
 use Zenstruck\Collection\Specification\Filter\EqualTo;
@@ -94,6 +95,7 @@ final class CriteriaInterpreter
             LessThan::class => Criteria::expr()->lt($specification->field, $specification->value),
             LessThanOrEqualTo::class => Criteria::expr()->lte($specification->field, $specification->value),
             StartsWith::class => Criteria::expr()->startsWith($specification->field, $specification->value),
+            Between::class => $this->transform($specification->asAnd()),
 
             Callback::class => ($specification->value)($this->criteria),
 

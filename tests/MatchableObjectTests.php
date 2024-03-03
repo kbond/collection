@@ -13,6 +13,7 @@ namespace Zenstruck\Collection\Tests;
 
 use Zenstruck\Collection\Matchable;
 use Zenstruck\Collection\Spec;
+use Zenstruck\Collection\Specification\Filter\Between;
 use Zenstruck\Collection\Specification\Nested;
 
 /**
@@ -313,6 +314,25 @@ trait MatchableObjectTests
         });
 
         $this->assertSame('value 2', $object->value);
+    }
+
+    /**
+     * @test
+     */
+    public function between_specification(): void
+    {
+        $repo = $this->createWithItems(6);
+
+        $this->assertCount(3, $r = $repo->filter(new Between('id', 2, 4)));
+        $this->assertSame(2, $r->first()->id);
+        $this->assertCount(2, $r = $repo->filter(new Between('id', 2, 4, Between::EXCLUSIVE_BEGIN)));
+        $this->assertSame(3, $r->first()->id);
+        $this->assertCount(2, $r = $repo->filter(new Between('id', 2, 4, Between::EXCLUSIVE_END)));
+        $this->assertSame(2, $r->first()->id);
+        $this->assertCount(3, $r = $repo->filter(Between::inclusive('id', 2, 4)));
+        $this->assertSame(2, $r->first()->id);
+        $this->assertCount(1, $r = $repo->filter(Between::exclusive('id', 2, 4)));
+        $this->assertSame(3, $r->first()->id);
     }
 
     abstract protected function createWithItems(int $count): Matchable;
