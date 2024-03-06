@@ -28,6 +28,6 @@ final class Grid3Definition implements GridDefinition
     public function configure(GridBuilder $builder): void
     {
         $builder->addColumn('id');
-        $builder->specification = new GreaterThan('id', 2);
+        $builder->defaultSpecification = new GreaterThan('id', 2);
     }
 }

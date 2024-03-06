@@ -46,7 +46,7 @@ final class Grid implements \IteratorAggregate
         public readonly Columns $columns,
         public readonly Filters $filters,
         ?PerPage $perPage = null,
-        private ?object $specification = null,
+        private ?object $defaultSpecification = null,
     ) {
         $this->perPage = $perPage ?? new FixedPerPage();
     }
@@ -66,7 +66,7 @@ final class Grid implements \IteratorAggregate
         }
 
         $specification = new AndX(...\array_filter([
-            $this->specification,
+            $this->defaultSpecification,
             $this->columns->sort(),
             $this->searchSpecification(),
             new AndX(...\array_filter($this->filterSpecification())),

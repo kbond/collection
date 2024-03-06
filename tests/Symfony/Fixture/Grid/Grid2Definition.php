@@ -26,6 +26,6 @@ final class Grid2Definition implements GridDefinition
     public function configure(GridBuilder $builder): void
     {
         $builder->addColumn('id');
-        $builder->specification = new GreaterThan('id', 1);
+        $builder->defaultSpecification = new GreaterThan('id', 1);
     }
 }

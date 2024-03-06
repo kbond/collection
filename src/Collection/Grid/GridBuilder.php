@@ -34,7 +34,7 @@ final class GridBuilder
     public ?Handler $handler = null;
     public ?OrderBy $defaultSort = null;
     public ?PerPage $perPage = null;
-    public ?object $specification = null;
+    public ?object $defaultSpecification = null;
 
     /** @var array<string,ColumnDefinition<T>> */
     private array $columns = [];
@@ -76,7 +76,7 @@ final class GridBuilder
             columns: new Columns($columns, $input, $this->defaultSort), // @phpstan-ignore-line
             filters: new Filters($this->filters),
             perPage: $this->perPage,
-            specification: $this->specification,
+            defaultSpecification: $this->defaultSpecification,
         );
     }
 
