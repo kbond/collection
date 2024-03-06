@@ -11,7 +11,6 @@
 
 namespace Zenstruck\Collection;
 
-use Zenstruck\Collection\Grid\Actions;
 use Zenstruck\Collection\Grid\Column;
 use Zenstruck\Collection\Grid\Columns;
 use Zenstruck\Collection\Grid\Filter;
@@ -40,13 +39,11 @@ final class Grid implements \IteratorAggregate
     /**
      * @param Matchable<mixed,T> $source
      * @param Columns<T>         $columns
-     * @param Actions<T>         $actions
      */
     public function __construct(
         public readonly Input $input,
         public readonly Matchable $source,
         public readonly Columns $columns,
-        public readonly Actions $actions,
         public readonly Filters $filters,
         ?PerPage $perPage = null,
         private ?object $specification = null,

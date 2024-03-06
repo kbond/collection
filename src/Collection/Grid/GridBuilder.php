@@ -12,7 +12,6 @@
 namespace Zenstruck\Collection\Grid;
 
 use Zenstruck\Collection\Grid;
-use Zenstruck\Collection\Grid\Definition\ActionDefinition;
 use Zenstruck\Collection\Grid\Definition\ColumnDefinition;
 use Zenstruck\Collection\Grid\Filter\AutoFilter;
 use Zenstruck\Collection\Grid\Formatter\DateTimeFormatter;
@@ -36,13 +35,9 @@ final class GridBuilder
     public ?OrderBy $defaultSort = null;
     public ?PerPage $perPage = null;
     public ?object $specification = null;
-    public ?string $defaultAction = null;
 
     /** @var array<string,ColumnDefinition<T>> */
     private array $columns = [];
-
-    /** @var array<string,ActionDefinition<T>> */
-    private array $actions = [];
 
     /** @var array<string,Filter> */
     private array $filters = [];
@@ -75,19 +70,10 @@ final class GridBuilder
             ))
         ;
 
-        $actions = collect($this->actions)
-            ->sortBy(fn(ActionDefinition $action) => $action->weight)
-            ->map(fn(ActionDefinition $action) => new Action(
-                definition: $action,
-                handler: $handler,
-            ))
-        ;
-
         return new Grid( // @phpstan-ignore-line
             input: $input,
             source: $this->source ?? throw new \LogicException('No source defined.'), // @phpstan-ignore-line
             columns: new Columns($columns, $input, $this->defaultSort), // @phpstan-ignore-line
-            actions: new Actions($actions), // @phpstan-ignore-line
             filters: new Filters($this->filters),
             perPage: $this->perPage,
             specification: $this->specification,
@@ -150,35 +136,6 @@ final class GridBuilder
     public function addDefaultFormatter(Formatter $formatter): self
     {
         $this->defaultFormatters[$formatter::name()] = $formatter;
-
-        return $this;
-    }
-
-    /**
-     * @param array<string,mixed|(object&callable(T):mixed)> $parameters prefix values with "@" to access item properties
-     * @param bool|string|(object&callable(T):bool)          $visible
-     * @param null|string|(object&callable(T):string)        $url
-     *
-     * @return $this
-     */
-    public function addAction(
-        string $name,
-        ?string $route = null,
-        array $parameters = [],
-        bool|string|callable $visible = true,
-        string|callable|null $url = null,
-        ?string $label = null,
-        ?int $weight = null,
-    ): self {
-        $this->actions[$name] = new ActionDefinition( // @phpstan-ignore-line
-            name: $name,
-            route: $route,
-            parameters: $parameters,
-            visible: \is_object($visible) && \is_callable($visible) ? $visible(...) : $visible,
-            url: \is_object($url) && \is_callable($url) ? $url(...) : $url,
-            label: $label,
-            weight: $weight ?? (\count($this->actions) + 1) * 100,
-        );
 
         return $this;
     }
