@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Zenstruck\Collection\Grid;
 use Zenstruck\Collection\Grid\GridBuilder;
 use Zenstruck\Collection\Grid\GridDefinition;
-use Zenstruck\Collection\Grid\Handler;
 use Zenstruck\Collection\Grid\Input\UriInput;
 
 /**
@@ -24,10 +23,8 @@ use Zenstruck\Collection\Grid\Input\UriInput;
  */
 final class GridFactory
 {
-    public function __construct(
-        private ContainerInterface $definitions,
-        private ?Handler $defaultHandler = null,
-    ) {
+    public function __construct(private ContainerInterface $definitions)
+    {
     }
 
     /**
@@ -42,10 +39,6 @@ final class GridFactory
         }
 
         $definitionObject->configure($builder = new GridBuilder());
-
-        if ($this->defaultHandler && !$builder->handler) {
-            $builder->handler = $this->defaultHandler;
-        }
 
         return $builder->build(new UriInput($input, $key));
     }

@@ -37,8 +37,9 @@ final class Grid implements \IteratorAggregate
     private Page $page;
 
     /**
+     * @internal
+     *
      * @param Matchable<mixed,T> $source
-     * @param Columns<T>         $columns
      */
     public function __construct(
         public readonly Input $input,

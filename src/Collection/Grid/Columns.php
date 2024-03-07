@@ -17,33 +17,22 @@ use Zenstruck\Collection\Specification\OrderBy;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  *
- * @template T of array<string,mixed>|object
- *
- * @implements \IteratorAggregate<string,Column<T>>
+ * @implements \IteratorAggregate<string,Column>
  */
 final class Columns implements \IteratorAggregate, \Countable
 {
-    /** @var self<T> */
-    private self $visible;
-
-    /** @var self<T> */
     private self $searchable;
-
-    /** @var self<T> */
     private self $sortable;
 
     /**
      * @internal
      *
-     * @param ArrayCollection<string,Column<T>> $columns
+     * @param ArrayCollection<string,Column> $columns
      */
     public function __construct(private ArrayCollection $columns, private Input $input, private ?OrderBy $defaultSort)
     {
     }
 
-    /**
-     * @return ?Column<T>
-     */
     public function get(string $name): ?Column
     {
         return $this->columns->get($name);
@@ -54,25 +43,11 @@ final class Columns implements \IteratorAggregate, \Countable
         return $this->columns->has($name);
     }
 
-    /**
-     * @return $this
-     */
-    public function visible(): self
-    {
-        return $this->visible ??= new self($this->columns->filter(fn(Column $c) => $c->isVisible()), $this->input, $this->defaultSort);
-    }
-
-    /**
-     * @return $this
-     */
     public function searchable(): self
     {
         return $this->searchable ??= new self($this->columns->filter(fn(Column $c) => $c->isSearchable()), $this->input, $this->defaultSort);
     }
 
-    /**
-     * @return $this
-     */
     public function sortable(): self
     {
         return $this->sortable ??= new self($this->columns->filter(fn(Column $c) => $c->isSortable()), $this->input, $this->defaultSort);
@@ -88,7 +63,7 @@ final class Columns implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @return ArrayCollection<string,Column<T>>
+     * @return ArrayCollection<string,Column>
      */
     public function all(): ArrayCollection
     {

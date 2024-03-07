@@ -14,9 +14,6 @@ namespace Zenstruck\Collection\Grid;
 use Zenstruck\Collection\Grid;
 use Zenstruck\Collection\Grid\Definition\ColumnDefinition;
 use Zenstruck\Collection\Grid\Filter\AutoFilter;
-use Zenstruck\Collection\Grid\Formatter\DateTimeFormatter;
-use Zenstruck\Collection\Grid\Formatter\EmptyFormatter;
-use Zenstruck\Collection\Grid\Handler\DefaultHandler;
 use Zenstruck\Collection\Matchable;
 use Zenstruck\Collection\Specification\OrderBy;
 
@@ -31,49 +28,32 @@ final class GridBuilder
 {
     /** @var Matchable<mixed,T>|null */
     public ?Matchable $source = null;
-    public ?Handler $handler = null;
     public ?OrderBy $defaultSort = null;
     public ?PerPage $perPage = null;
     public ?object $defaultSpecification = null;
 
-    /** @var array<string,ColumnDefinition<T>> */
+    /** @var array<string,ColumnDefinition> */
     private array $columns = [];
 
     /** @var array<string,Filter> */
     private array $filters = [];
-
-    /** @var array<string,Formatter> */
-    private array $defaultFormatters = [];
-
-    public function __construct()
-    {
-        $this
-            ->addDefaultFormatter(new DateTimeFormatter())
-            ->addDefaultFormatter(new EmptyFormatter())
-        ;
-    }
 
     /**
      * @return Grid<T>
      */
     public function build(Input $input): Grid
     {
-        $handler = $this->handler ?? new DefaultHandler();
-
         $columns = collect($this->columns)
-            ->sortBy(fn(ColumnDefinition $column) => $column->weight)
             ->map(fn(ColumnDefinition $column) => new Column(
                 definition: $column,
                 input: $input,
-                handler: $handler,
-                formatters: [...$this->defaultFormatters, ...$column->formatters],
             ))
         ;
 
-        return new Grid( // @phpstan-ignore-line
+        return new Grid(
             input: $input,
-            source: $this->source ?? throw new \LogicException('No source defined.'), // @phpstan-ignore-line
-            columns: new Columns($columns, $input, $this->defaultSort), // @phpstan-ignore-line
+            source: $this->source ?? throw new \LogicException('No source defined.'),
+            columns: new Columns($columns, $input, $this->defaultSort),
             filters: new Filters($this->filters),
             perPage: $this->perPage,
             defaultSpecification: $this->defaultSpecification,
@@ -81,34 +61,21 @@ final class GridBuilder
     }
 
     /**
-     * @param bool|string|(object&callable():bool)   $visible
-     * @param null|string|(object&callable(T):mixed) $accessor
-     * @param OrderBy::*|null                        $defaultSort
-     * @param Formatter[]|Formatter                  $formatters
+     * @param OrderBy::*|null $defaultSort
      *
      * @return $this
      */
     public function addColumn(
         string $name,
-        ?string $label = null,
         bool $searchable = false,
         bool $sortable = false,
         bool $autofilter = false,
-        bool|string|callable $visible = true,
-        ?int $weight = null,
-        string|callable|null $accessor = null,
         ?string $defaultSort = null,
-        Formatter|array $formatters = [],
     ): self {
-        $this->columns[$name] = new ColumnDefinition( // @phpstan-ignore-line
+        $this->columns[$name] = new ColumnDefinition(
             name: $name,
-            label: $label,
             searchable: $searchable,
             sortable: $sortable,
-            visible: \is_object($visible) && \is_callable($visible) ? $visible(...) : $visible,
-            weight: $weight ?? (\count($this->columns) + 1) * 100,
-            accessor: \is_object($accessor) && \is_callable($accessor) ? $accessor(...) : $accessor,
-            formatters: \is_array($formatters) ? $formatters : [$formatters],
         );
 
         if ($defaultSort) {
@@ -122,9 +89,6 @@ final class GridBuilder
         return $this;
     }
 
-    /**
-     * @return ColumnDefinition<T>
-     */
     public function getColumn(string $name): ColumnDefinition
     {
         return $this->columns[$name] ?? throw new \InvalidArgumentException(\sprintf('Column "%s" does not exist.', $name));
@@ -133,9 +97,9 @@ final class GridBuilder
     /**
      * @return $this
      */
-    public function addDefaultFormatter(Formatter $formatter): self
+    public function removeColumn(string $name): self
     {
-        $this->defaultFormatters[$formatter::name()] = $formatter;
+        unset($this->columns[$name]);
 
         return $this;
     }
@@ -146,6 +110,21 @@ final class GridBuilder
     public function addFilter(string $name, Filter $filter): self
     {
         $this->filters[$name] = $filter;
+
+        return $this;
+    }
+
+    public function getFilter(string $name): Filter
+    {
+        return $this->filters[$name] ?? throw new \InvalidArgumentException(\sprintf('Filter "%s" does not exist.', $name));
+    }
+
+    /**
+     * @return $this
+     */
+    public function removeFilter(string $name): self
+    {
+        unset($this->filters[$name]);
 
         return $this;
     }
