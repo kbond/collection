@@ -14,6 +14,7 @@ namespace Zenstruck\Collection\Tests\Doctrine\ORM;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Zenstruck\Collection\Doctrine\Batch\CountableBatchIterator;
 use Zenstruck\Collection\Doctrine\DoctrineSpec;
 use Zenstruck\Collection\Doctrine\ObjectRepository;
@@ -22,8 +23,11 @@ use Zenstruck\Collection\Doctrine\ORM\Specification\Join;
 use Zenstruck\Collection\Exception\InvalidSpecification;
 use Zenstruck\Collection\Spec;
 use Zenstruck\Collection\Tests\CountableIteratorTests;
+use Zenstruck\Collection\Tests\Doctrine\Fixture\Circle;
 use Zenstruck\Collection\Tests\Doctrine\Fixture\Entity;
 use Zenstruck\Collection\Tests\Doctrine\Fixture\Relation;
+use Zenstruck\Collection\Tests\Doctrine\Fixture\Shape;
+use Zenstruck\Collection\Tests\Doctrine\Fixture\Square;
 use Zenstruck\Collection\Tests\Doctrine\HasDatabase;
 use Zenstruck\Collection\Tests\MatchableObjectTests;
 
@@ -248,6 +252,23 @@ class EntityRepositoryTest extends TestCase
         $results = $repo->filter(Spec::contains('value', '*l*e 2'));
         $this->assertCount(1, $results);
         $this->assertSame('value 2', $results->first()->value);
+    }
+
+    /**
+     * @test
+     */
+    public function instance_of_specification(): void
+    {
+        $this->em->persist(new Circle('c1'));
+        $this->em->persist(new Circle('c2'));
+        $this->em->persist(new Square('s1'));
+        $this->flushAndClear();
+
+        $shapes = new EntityRepository($this->em, Shape::class);
+
+        $this->assertCount(3, $shapes);
+        $this->assertCount(2, $shapes->filter(DoctrineSpec::instanceOf(Circle::class)));
+        $this->assertCount(1, $shapes->filter(DoctrineSpec::instanceOf(Square::class)));
     }
 
     /**
